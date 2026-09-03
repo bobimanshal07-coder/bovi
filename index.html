@@ -29,9 +29,70 @@
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background: #0f172a;
+      background: radial-gradient(circle at center, #2e1065 0%, #1e1b4b 50%, #0f0728 100%);
       font-family: 'Poppins', system-ui, -apple-system, sans-serif;
       touch-action: manipulation;
+    }
+
+    .ambient-glow {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 30%, rgba(244, 114, 182, 0.12), transparent 70%),
+                  radial-gradient(circle at 20% 80%, rgba(251, 146, 60, 0.08), transparent 50%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    #bgCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: auto;
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      opacity: 0.75;
+      cursor: pointer;
+      animation: floatUp linear infinite;
+      transition: transform 0.2s ease, opacity 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .balloon::after {
+      content: "";
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      width: 2px;
+      height: 14px;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateX(-50%);
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-60vh) rotate(6deg); }
+      100% { transform: translateY(-120vh) rotate(-6deg); }
+    }
+
+    .sparkle {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: pulseSparkle 3s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes pulseSparkle {
+      0% { opacity: 0.2; transform: scale(0.8); }
+      100% { opacity: 0.9; transform: scale(1.4); }
     }
 
     #app-container {
@@ -42,6 +103,7 @@
       justify-content: center;
       padding: 0.75rem;
       position: relative;
+      z-index: 10;
     }
 
     .card-box {
@@ -52,12 +114,12 @@
       touch-action: pan-y;
       -webkit-overflow-scrolling: touch;
       border-radius: 1.5rem;
-      background: rgba(255, 255, 255, 0.96);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 20px 30px rgba(0,0,0,0.3);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.4);
       padding: 1.25rem;
       position: relative;
-      z-index: 10;
+      transition: backdrop-filter 0.3s ease;
     }
 
     @keyframes scan {
@@ -107,18 +169,121 @@
       animation: swing 4s ease-in-out infinite;
       transform-origin: top center;
     }
+
+    .tilt-card {
+      transition: transform 0.15s ease-out;
+      will-change: transform;
+    }
+
+    .text-glow {
+      text-shadow: 0 0 8px rgba(244, 114, 182, 0.6);
+    }
+
+    .reveal-line {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.8s forwards;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 <body oncontextmenu="return false;">
 
+  <div class="ambient-glow"></div>
+  <div id="bgCanvas"></div>
+
   <div id="app-container">
-    <div id="card" class="card-box text-center border border-pink-200"></div>
+    <div id="card" class="card-box text-center border border-pink-200/50"></div>
   </div>
 
   <script>
     (function(){
-      emailjs.init("YOUR_PUBLIC_KEY");
+      // Initializing EmailJS with Public Key
+      emailjs.init("1_17ZiSFEhTpwcA4M");
     })();
+
+    const bgCanvas = document.getElementById('bgCanvas');
+    const hiddenMessages = ["Cute Lagdi Ho! ❤️", "Always Smile 😊", "Special Day ✨", "Stay Blessed 💗", "Paglu 🐒"];
+    
+    function initBackground() {
+      for (let i = 0; i < 25; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        const size = Math.random() * 3 + 1;
+        sparkle.style.width = size + 'px';
+        sparkle.style.height = size + 'px';
+        sparkle.style.left = Math.random() * 100 + 'vw';
+        sparkle.style.top = Math.random() * 100 + 'vh';
+        sparkle.style.animationDelay = Math.random() * 3 + 's';
+        bgCanvas.appendChild(sparkle);
+      }
+
+      const colors = [
+        'rgba(190, 18, 60, 0.65)',
+        'rgba(225, 29, 72, 0.55)',
+        'rgba(159, 18, 57, 0.7)',
+        'rgba(217, 119, 6, 0.45)',
+        'rgba(136, 19, 55, 0.6)'
+      ];
+
+      for (let i = 0; i < 12; i++) {
+        createBalloon(colors);
+      }
+    }
+
+    function createBalloon(colors) {
+      const b = document.createElement('div');
+      b.className = 'balloon';
+      const size = Math.random() * 25 + 35;
+      b.style.width = size + 'px';
+      b.style.height = (size * 1.25) + 'px';
+      b.style.left = Math.random() * 92 + 'vw';
+      b.style.background = colors[Math.floor(Math.random() * colors.length)];
+      
+      const blur = Math.random() > 0.5 ? (Math.random() * 2 + 1) : 0;
+      b.style.filter = `blur(${blur}px)`;
+      
+      b.style.animationDuration = (Math.random() * 8 + 10) + 's';
+      b.style.animationDelay = Math.random() * 5 + 's';
+
+      b.onclick = (e) => {
+        e.stopPropagation();
+        popBalloon(b, e.clientX, e.clientY);
+      };
+
+      bgCanvas.appendChild(b);
+    }
+
+    function popBalloon(balloon, x, y) {
+      confetti({
+        particleCount: 15,
+        spread: 40,
+        origin: { x: x / window.innerWidth, y: y / window.innerHeight },
+        colors: ['#f472b6', '#fb7185', '#ffd700']
+      });
+
+      if (Math.random() > 0.4) {
+        const msg = document.createElement('div');
+        msg.className = 'falling-msg';
+        msg.style.left = Math.min(Math.max(x - 40, 10), window.innerWidth - 120) + 'px';
+        msg.style.top = y + 'px';
+        msg.innerText = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)];
+        msg.style.animationDuration = '2s';
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 2000);
+      }
+
+      balloon.remove();
+      setTimeout(() => createBalloon(['rgba(190, 18, 60, 0.65)', 'rgba(225, 29, 72, 0.55)', 'rgba(217, 119, 6, 0.45)']), 3000);
+    }
+
+    initBackground();
 
     let step = 1;
     let holdProgress = 0;
@@ -198,26 +363,34 @@
     function render() {
       const card = document.getElementById('card');
 
-      // 1. COUNTDOWN
       if (step === 1) {
         card.innerHTML = `
           <div class="text-5xl mb-2">⏳✨</div>
           <h2 class="text-xl font-bold text-pink-600 mb-4">Riya's Birthday Countdown 🎂❤️</h2>
           <div id="timerDisplay" class="grid grid-cols-4 gap-2 text-center font-bold text-gray-700 mb-6"></div>
-          <button onclick="setStep(2)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition w-full">Start Surprise 🎁✨</button>
+          <button onclick="setStep(2)" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg active:scale-95 transition w-full">Start Surprise 🎁✨</button>
         `;
         updateTimer();
       } 
-      // 2. INTRO
       else if (step === 2) {
         card.innerHTML = `
-          <div class="text-6xl mb-3 animate-bounce">🐒✉️</div>
+          <div id="monkeyContainer" class="text-6xl mb-3 cursor-pointer transition-transform duration-200">🐒✉️</div>
           <h2 class="text-2xl font-bold text-pink-600 mb-2">A Special Wish For Riya ✨</h2>
           <p class="text-gray-600 text-sm mb-6">Tuhade layi ek chhota jeha pyara surprise!</p>
-          <button onclick="setStep(3)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition">Open Letter 💌</button>
+          <button onclick="setStep(3)" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg active:scale-95 transition">Chal, surprise start kariye → 💌</button>
         `;
+
+        setTimeout(() => {
+          const monkey = document.getElementById('monkeyContainer');
+          if (monkey) {
+            window.onmousemove = (e) => {
+              const x = (e.clientX / window.innerWidth - 0.5) * 20;
+              const y = (e.clientY / window.innerHeight - 0.5) * 20;
+              monkey.style.transform = `translate(${x}px, ${y}px) scale(1.1)`;
+            };
+          }
+        }, 50);
       } 
-      // 3. FINGERPRINT SCANNER
       else if (step === 3) {
         card.innerHTML = `
           <h2 class="text-xl font-bold text-gray-800 mb-1">🔐 Biometric Verification</h2>
@@ -237,37 +410,33 @@
           <p id="fpText" class="text-xs font-bold text-cyan-600">${holdProgress}%</p>
         `;
       } 
-      // 4. READY
       else if (step === 4) {
         card.innerHTML = `
           <h2 class="text-2xl font-bold text-pink-600 mb-6">Are You Ready For The Surprise? 💗</h2>
-          <button onclick="setStep(5)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition">Yes, I am Ready! ✨</button>
+          <button onclick="setStep(5)" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg active:scale-95 transition">Yes, I am Ready! ✨</button>
         `;
       }
-      // 5. HAPPY BIRTHDAY RIBBON
       else if (step === 5) {
         card.innerHTML = `
-          <h1 class="text-3xl font-extrabold text-pink-600 mb-6">🎉 Happy Birthday Riya ❤️ 🎂</h1>
-          <button onclick="setStep(6)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition">Next ✨</button>
+          <h1 class="text-3xl font-extrabold text-pink-600 mb-6 animate-pulse">🎉 Happy Birthday Riya ❤️ 🎂</h1>
+          <button onclick="setStep(6)" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg active:scale-95 transition">Next ✨</button>
         `;
       } 
-      // 6. FIRST WISH
       else if (step === 6) {
         card.innerHTML = `
           <div class="text-5xl mb-4">💌</div>
-          <p class="text-gray-700 leading-relaxed text-sm mb-6">
+          <p class="text-gray-700 leading-relaxed text-sm mb-6 font-medium">
             "Rabb kare tuhada eh saal khushiyan, achhi health te kamyabi naal bharya rahe. Hamesha eda hi smile karde raho! ✨❤️"
           </p>
-          <button onclick="setStep(7)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition">Chalo agge →</button>
+          <button onclick="setStep(7)" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg active:scale-95 transition">Chalo agge →</button>
         `;
       } 
-      // 7. MEMORIES GALLERY
       else if (step === 7) {
         card.innerHTML = `
           <h2 class="text-xl font-bold text-pink-600">Some Sweet Moments 💗</h2>
           <p class="text-xs text-gray-400 mb-3">Swipe or tap arrows</p>
-          <div class="bg-pink-50 p-3 rounded-2xl shadow-inner border border-pink-100">
-            <img src="${photos[activePhotoIdx].src}" alt="Memory" class="w-full h-52 object-cover rounded-xl mb-2"/>
+          <div id="tiltCardBox" class="tilt-card bg-pink-50 p-3 rounded-2xl shadow-inner border border-pink-100 cursor-pointer">
+            <img src="${photos[activePhotoIdx].src}" alt="Memory" class="w-full h-52 object-cover rounded-xl mb-2 shadow-md"/>
             <p class="text-xs font-semibold text-pink-600">${photos[activePhotoIdx].caption}</p>
           </div>
           <div class="flex items-center justify-center gap-4 my-3">
@@ -275,10 +444,24 @@
             <span class="text-xs font-semibold text-gray-500">${activePhotoIdx + 1} / ${photos.length}</span>
             <button ${activePhotoIdx === photos.length - 1 ? 'disabled' : ''} onclick="nextPhoto()" class="bg-pink-500 text-white px-3 py-1 rounded-lg text-sm disabled:opacity-30">▶</button>
           </div>
-          <button onclick="setStep(8)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition w-full">Agge Chalo →</button>
+          <button onclick="setStep(8)" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg active:scale-95 transition w-full">Agge Chalo →</button>
         `;
+
+        setTimeout(() => {
+          const tCard = document.getElementById('tiltCardBox');
+          if (tCard) {
+            tCard.onmousemove = (e) => {
+              const rect = tCard.getBoundingClientRect();
+              const x = e.clientX - rect.left - rect.width / 2;
+              const y = e.clientY - rect.top - rect.height / 2;
+              tCard.style.transform = `perspective(1000px) rotateX(${-y / 10}deg) rotateY(${x / 10}deg) scale(1.02)`;
+            };
+            tCard.onmouseleave = () => {
+              tCard.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+            };
+          }
+        }, 50);
       } 
-      // 8. RELATIONSHIP QUESTIONS
       else if (step === 8) {
         let q = relQuestions[relIndex];
         let opts = q.options.map((opt) => `
@@ -293,316 +476,23 @@
           <p id="relReact" class="text-xs font-bold text-pink-600 mt-3 min-h-[20px] ${relReaction ? 'animate-bounce' : ''}">${relReaction}</p>
         `;
       } 
-      // 9. ALL COMMITMENTS ON ONE PAGE
       else if (step === 9) {
+        let completedCount = Object.keys(comAnswers).length;
+
         let questionsHtml = comQuestions.map((cq, idx) => {
+          let isSelected = comAnswers[idx] !== undefined;
           let opts = cq.options.map(opt => `
             <option value="${opt}" ${comAnswers[idx] === opt ? 'selected' : ''}>${opt}</option>
           `).join('');
+
           return `
-            <div class="bg-pink-50 p-3 rounded-xl border border-pink-200 text-left mb-3">
-              <p class="text-xs font-bold text-gray-800 mb-2">✓ Commitment ${idx+1}: ${cq.q}</p>
+            <div class="bg-pink-50 p-3 rounded-xl border border-pink-200 text-left mb-3 relative overflow-hidden transition-all">
+              <p class="text-xs font-bold text-gray-800 mb-2 flex items-center justify-between">
+                <span>Commitment ${idx+1}: ${cq.q}</span>
+                ${isSelected ? '<span class="text-green-500 font-extrabold text-sm animate-bounce">✓</span>' : ''}
+              </p>
               <select onchange="saveComAnswer(${idx}, this.value)" class="w-full text-xs p-2 rounded-lg border border-pink-300 bg-white text-pink-600 font-medium focus:outline-none">
                 <option value="" disabled ${!comAnswers[idx] ? 'selected' : ''}>Select your promise...</option>
                 ${opts}
               </select>
-            </div>
-          `;
-        }).join('');
-
-        let allCompleted = Object.keys(comAnswers).length === comQuestions.length;
-
-        card.innerHTML = `
-          <h2 class="text-xl font-bold text-pink-600 mb-1">💌 Commitments</h2>
-          <p class="text-xs text-gray-500 mb-4">Answer all commitments to sign ❤️</p>
-          <div class="max-h-64 overflow-y-auto pr-1">${questionsHtml}</div>
-          
-          ${allCompleted ? `
-            <div class="mt-3 p-2 bg-pink-100 rounded-xl text-xs text-pink-700 font-semibold animate-pulse">
-              Bas saare commitments ho gaye... 👀❤️<br/>Ab ek last sign banta hai ✍️
-            </div>
-            <button onclick="setStep(10)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition w-full mt-3">Go to Signature ✍️</button>
-          ` : `
-            <p class="text-[11px] text-gray-400 mt-2">Please answer all 5 questions to proceed.</p>
-          `}
-        `;
-      } 
-      // 10. ONE FINAL SIGNATURE
-      else if (step === 10) {
-        card.innerHTML = `
-          <h2 class="text-lg font-bold text-pink-600 mb-1">✍️ Digital Signature</h2>
-          <p class="text-xs text-gray-600 mb-3">"Main, Riya, eh saare commitments dil naal accept kardi aa. ❤️"</p>
-          
-          <div class="relative mx-auto mb-2">
-            <canvas id="sigCanvas" width="280" height="100" class="border-2 border-dashed border-pink-400 rounded-xl bg-white mx-auto touch-none"></canvas>
-            <p class="text-[10px] text-gray-400 mt-1">Apna cute jeha sign kar de ✍️</p>
-          </div>
-
-          <div class="flex gap-2">
-            <button onclick="clearCanvas()" class="w-1/3 bg-gray-200 text-gray-700 py-2 rounded-xl text-xs font-semibold">Clear</button>
-            <button id="sigBtn" onclick="submitCommitment()" class="w-2/3 bg-pink-500 text-white py-2 rounded-xl text-xs font-semibold shadow-md ${hasSigned ? '' : 'opacity-50 pointer-events-none'}">Sign & Continue ❤️</button>
-          </div>
-        `;
-        setTimeout(initCanvas, 50);
-      }
-      // 11. SIGNED COMMITMENT KEEPSAKE CARD
-      else if (step === 11) {
-        let listItems = comQuestions.map((q, idx) => `
-          <div class="text-left border-b border-pink-100 pb-1">
-            <p class="font-bold text-gray-700 text-[11px]">✓ ${q.q}</p>
-            <p class="text-pink-600 font-semibold text-[11px]">👉 ${comAnswers[idx]}</p>
-          </div>
-        `).join('');
-
-        card.innerHTML = `
-          <div class="bg-gradient-to-b from-pink-50 to-white p-4 rounded-2xl border-2 border-pink-300 shadow-lg text-center">
-            <h3 class="text-base font-extrabold text-pink-600 mb-2">💌 Commitment by Riya</h3>
-            <div class="space-y-2 mb-3 max-h-48 overflow-y-auto pr-1">${listItems}</div>
-            
-            <div class="border-t border-pink-200 pt-2 mt-2">
-              <p class="text-[10px] text-gray-400 font-bold mb-1">Riya's Digital Signature ✍️</p>
-              <img src="${userSignatureData}" alt="Signature" class="h-12 mx-auto border border-pink-200 rounded-lg bg-white p-1"/>
-              <p class="text-[10px] text-pink-500 italic mt-2">"Made with a little promise & a lot of heart. ❤️"</p>
-            </div>
-          </div>
-
-          <p class="text-xs text-pink-600 font-bold mt-3">Okay... hun eh promise officially save ho gayi. 😌❤️</p>
-          <button onclick="setStep(12)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition w-full mt-3">Proceed to Photo Garland 📸</button>
-        `;
-      }
-      // 12. PHOTO GARLAND
-      else if (step === 12) {
-        let garlandCards = photos.map((p, i) => `
-          <div class="garland-photo inline-block bg-white p-2 rounded-xl shadow-md border border-pink-200 m-1 w-24">
-            <img src="${p.src}" class="w-full h-20 object-cover rounded-lg mb-1"/>
-            <p class="text-[9px] font-bold text-pink-600 truncate">${p.caption}</p>
-          </div>
-        `).join('');
-
-        card.innerHTML = `
-          <h2 class="text-base font-bold text-pink-600 mb-1">📸 Memory Garland</h2>
-          <p class="text-xs text-gray-600 italic mb-4">"Kujh yaadaan… jo hamesha special rehn giyaan. ✨"</p>
-          
-          <div class="bg-slate-900 p-3 rounded-2xl mb-4 border border-pink-300 overflow-x-auto whitespace-nowrap">
-            <div class="w-full h-1 bg-amber-200/40 mb-2 rounded-full relative"></div>
-            ${garlandCards}
-          </div>
-
-          <button onclick="setStep(13)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition w-full">Proceed to Cake 🎂</button>
-        `;
-      }
-      // 13. CAKE REVEAL & MESSAGE RAINFALL
-      else if (step === 13) {
-        card.innerHTML = `
-          <h2 class="text-xl font-bold text-pink-600 mb-1">Tap the Cake! 🎂</h2>
-          <div onclick="handleCakeClick()" class="text-7xl my-6 cursor-pointer active:scale-125 transition transform select-none inline-block">🎂✨</div>
-          <p class="text-xs text-pink-500 font-bold mb-4">Tap cake for surprise rainfall! 💌</p>
-
-          <div id="nextBox" class="hidden">
-            <p class="text-xs font-bold text-gray-700 mb-2">Ready for one last thing? ✨</p>
-            <button onclick="setStep(14)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition w-full">NEXT →</button>
-          </div>
-        `;
-      }
-      // 14. FINAL COLLAGE & WISH
-      else if (step === 14) {
-        card.innerHTML = `
-          <div class="grid grid-cols-3 gap-1 mb-3 bg-pink-100 p-2 rounded-2xl border border-pink-200">
-            <img src="photo1.jpg" class="h-16 w-full object-cover rounded-lg rotate-[-3deg] shadow-sm"/>
-            <img src="photo2.jpg" class="h-16 w-full object-cover rounded-lg rotate-[2deg] shadow-sm"/>
-            <img src="photo3.jpg" class="h-16 w-full object-cover rounded-lg rotate-[-2deg] shadow-sm"/>
-          </div>
-
-          <h2 class="text-base font-extrabold text-pink-600 mb-2">Happy Birthday Riya 🎂❤️</h2>
-
-          <div class="text-left bg-pink-50 p-3.5 rounded-2xl border border-pink-200 text-xs text-gray-700 leading-relaxed space-y-2.5 max-h-64 overflow-y-auto mb-3 shadow-inner">
-            <p>Rabb kare tu hamesha eddan hi hassdi reh, khush reh te life nu apne tareeke naal enjoy kardi reh. 🫶</p>
-            <p>Tere saare dreams taan menu honestly ni pta 🤭, par jo vi ne... saare hi poore hon. Tu life ch jo vi achieve karna chaundi aa, Rabb kare oh sab tenu mile, te har oh cheez mile jidi tu deserve kardi aa. ❤️</p>
-            <p>Te haan... ohna saare dreams ch menu chhad ke hor sab kuchh mil jaave, eh taan bilkul ni hona chahida 😂🤭❤️<br/>Thodi jehi jagah mere layi vi rakh lavi, baaki main adjust karunga. 😌</p>
-            <p>Sadi gall hamesha hundi vi ni, kade-kade hi hundi aa 🤭, par jinni vi hundi aa, oh apne aap ch special aa.<br/>Bas eddan hi kade-kade meri bak-bak sun lya kar. 😂</p>
-            <p>Bas ik gall hamesha yaad rakhi—<br/>khush rehna, apni smile nu kade na khona te jo vi dil ch aa, ohde piche zaroor jaana. ✨</p>
-            <p>Te haan Riya... birthday tera aa, wishaan vi teriyan ne, par thoda credit menu vi de di... inni sohni wish likhan layi. 😂🤭❤️</p>
-            <p class="font-bold text-pink-600 text-center pt-1">Happy Birthday once again Riya 🎂❤️</p>
-            <p class="text-center font-medium">Rabb kare aun wala har din tere layi hor vi sohnaa hove. ✨</p>
-          </div>
-
-          <p class="text-[11px] text-pink-600 italic font-semibold mb-3">"Made with memories, thodi bak-bak te bohot saara dil. 🐒❤️"</p>
-          <button onclick="setStep(15)" class="bg-pink-600 text-white px-6 py-2.5 rounded-full font-bold text-xs shadow-md active:scale-95 transition w-full">Finally Close 🔒</button>
-        `;
-      }
-      // 15. CLOSE
-      else if (step === 15) {
-        card.innerHTML = `
-          <div class="text-6xl mb-3">🎁✨</div>
-          <h2 class="text-2xl font-bold text-pink-600 mb-2">Surprise Completed!</h2>
-          <p class="text-gray-600 text-sm mb-6">Have a wonderful and blessed day ahead, Riya! ❤️</p>
-          <button onclick="setStep(1)" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-full text-xs font-semibold">Replay 🔄</button>
-        `;
-      }
-    }
-
-    function setStep(s) { step = s; render(); }
-    function prevPhoto() { if (activePhotoIdx > 0) { activePhotoIdx--; render(); } }
-    function nextPhoto() { if (activePhotoIdx < photos.length - 1) { activePhotoIdx++; render(); } }
-
-    function startHold(e) {
-      if (e) e.preventDefault();
-      const line = document.getElementById('scanLine');
-      if (line) line.classList.remove('hidden');
-
-      if (holdInterval) clearInterval(holdInterval);
-      holdInterval = setInterval(() => {
-        holdProgress += 25;
-        if (holdProgress >= 100) {
-          clearInterval(holdInterval);
-          holdInterval = null;
-          holdProgress = 100;
-          setStep(4);
-        } else {
-          const bar = document.getElementById('fpBar');
-          const txt = document.getElementById('fpText');
-          if (bar) bar.style.width = holdProgress + '%';
-          if (txt) txt.innerText = holdProgress + '%';
-        }
-      }, 900);
-    }
-
-    function endHold(e) {
-      if (e) e.preventDefault();
-      if (holdProgress < 100) {
-        if (holdInterval) clearInterval(holdInterval);
-        holdInterval = null;
-        holdProgress = 0;
-        const line = document.getElementById('scanLine');
-        if (line) line.classList.add('hidden');
-        const bar = document.getElementById('fpBar');
-        const txt = document.getElementById('fpText');
-        if (bar) bar.style.width = '0%';
-        if (txt) txt.innerText = '0%';
-      }
-    }
-
-    function handleRelAnswer(ansText, react) {
-      relAnswers.push({ q: relQuestions[relIndex].q, a: ansText });
-      relReaction = react;
-      render();
-      setTimeout(() => {
-        relReaction = '';
-        if (relIndex < relQuestions.length - 1) { relIndex++; } else { step = 9; }
-        render();
-      }, 1100);
-    }
-
-    function saveComAnswer(idx, val) {
-      comAnswers[idx] = val;
-      render();
-    }
-
-    function initCanvas() {
-      const canvas = document.getElementById('sigCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      
-      const getPos = e => {
-        const rect = canvas.getBoundingClientRect();
-        return {
-          x: (e.touches ? e.touches[0].clientX : e.clientX) - rect.left,
-          y: (e.touches ? e.touches[0].clientY : e.clientY) - rect.top
-        };
-      };
-
-      const startDraw = e => {
-        isDrawing = true; hasSigned = true;
-        const pos = getPos(e);
-        ctx.beginPath(); ctx.moveTo(pos.x, pos.y);
-        document.getElementById('sigBtn').classList.remove('opacity-50', 'pointer-events-none');
-      };
-
-      const draw = e => {
-        if (!isDrawing) return;
-        const pos = getPos(e);
-        ctx.strokeStyle = '#e11d48'; ctx.lineWidth = 3; ctx.lineCap = 'round';
-        ctx.lineTo(pos.x, pos.y); ctx.stroke();
-      };
-
-      const stopDraw = () => isDrawing = false;
-
-      canvas.onmousedown = startDraw; canvas.onmousemove = draw; canvas.onmouseup = stopDraw;
-      canvas.ontouchstart = startDraw; canvas.ontouchmove = draw; canvas.ontouchend = stopDraw;
-    }
-
-    function clearCanvas() {
-      const canvas = document.getElementById('sigCanvas');
-      if (canvas) {
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        hasSigned = false;
-        document.getElementById('sigBtn').classList.add('opacity-50', 'pointer-events-none');
-      }
-    }
-
-    function submitCommitment() {
-      const canvas = document.getElementById('sigCanvas');
-      if (canvas) userSignatureData = canvas.toDataURL();
-      
-      let payload = {
-        relationship_answers: relAnswers,
-        commitments: comAnswers
-      };
-      console.log("Riya's Answers Collected:", payload);
-      
-      setStep(11);
-    }
-
-    function handleCakeClick() {
-      confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
-
-      const messages = [
-        "Happy Birthday ❤️", "Love you 🫶", "Take care ✨", "Meri jaan 💗",
-        "Hamesha khush reh 🌷", "Smile maintain rakh 😊", "Tu bohot special aa ✨",
-        "Khush reh hamesha ❤️", "Apne dreams chase kardi reh ✨", "Bas eddan hi smile kardi reh 🫶"
-      ];
-
-      for (let i = 0; i < 5; i++) {
-        const el = document.createElement('div');
-        el.className = 'falling-msg';
-        el.innerText = messages[Math.floor(Math.random() * messages.length)];
-        el.style.left = Math.random() * 75 + 10 + 'vw';
-        el.style.animationDuration = (Math.random() * 1.5 + 2.5) + 's';
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), 3500);
-      }
-
-      const nextBox = document.getElementById('nextBox');
-      if (nextBox) nextBox.classList.remove('hidden');
-    }
-
-    function updateTimer() {
-      const target = new Date('2026-09-16T00:00:00+05:30').getTime();
-      const interval = setInterval(() => {
-        const now = new Date().getTime();
-        const diff = target - now;
-        const disp = document.getElementById('timerDisplay');
-        if (!disp) { clearInterval(interval); return; }
-        if (diff <= 0) {
-          disp.innerHTML = `<h1 class="col-span-4 text-xs font-bold text-pink-600 animate-bounce">It's Riya's Birthday! 🎂❤️</h1>`;
-          clearInterval(interval);
-        } else {
-          const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-          const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-          const s = Math.floor((diff % (1000 * 60)) / 1000);
-          disp.innerHTML = `
-            <div class="bg-pink-50 p-1.5 rounded-xl"><span class="text-sm text-pink-600">${d}</span><br/><span class="text-[9px] text-gray-400">Days</span></div>
-            <div class="bg-pink-50 p-1.5 rounded-xl"><span class="text-sm text-pink-600">${h}</span><br/><span class="text-[9px] text-gray-400">Hours</span></div>
-            <div class="bg-pink-50 p-1.5 rounded-xl"><span class="text-sm text-pink-600">${m}</span><br/><span class="text-[9px] text-gray-400">Mins</span></div>
-            <div class="bg-pink-50 p-1.5 rounded-xl"><span class="text-sm text-pink-600">${s}</span><br/><span class="text-[9px] text-gray-400">Secs</span></div>
-          `;
-        }
-      }, 1000);
-    }
-
-    render();
-  </script>
-</body>
-</html>
+            </div
