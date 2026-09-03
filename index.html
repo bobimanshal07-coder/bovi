@@ -203,15 +203,21 @@
   </div>
 
   <script>
-    (function(){
-      // Initializing EmailJS with Public Key
-      emailjs.init("1_17ZiSFEhTpwcA4M");
-    })();
+    document.addEventListener("DOMContentLoaded", function() {
+      // Safe initialization for EmailJS
+      if (typeof emailjs !== 'undefined') {
+        emailjs.init("1_17ZiSFEhTpwcA4M");
+      }
+
+      initBackground();
+      render();
+    });
 
     const bgCanvas = document.getElementById('bgCanvas');
     const hiddenMessages = ["Cute Lagdi Ho! ❤️", "Always Smile 😊", "Special Day ✨", "Stay Blessed 💗", "Paglu 🐒"];
     
     function initBackground() {
+      if (!bgCanvas) return;
       for (let i = 0; i < 25; i++) {
         const sparkle = document.createElement('div');
         sparkle.className = 'sparkle';
@@ -238,6 +244,7 @@
     }
 
     function createBalloon(colors) {
+      if (!bgCanvas) return;
       const b = document.createElement('div');
       b.className = 'balloon';
       const size = Math.random() * 25 + 35;
@@ -261,12 +268,14 @@
     }
 
     function popBalloon(balloon, x, y) {
-      confetti({
-        particleCount: 15,
-        spread: 40,
-        origin: { x: x / window.innerWidth, y: y / window.innerHeight },
-        colors: ['#f472b6', '#fb7185', '#ffd700']
-      });
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 15,
+          spread: 40,
+          origin: { x: x / window.innerWidth, y: y / window.innerHeight },
+          colors: ['#f472b6', '#fb7185', '#ffd700']
+        });
+      }
 
       if (Math.random() > 0.4) {
         const msg = document.createElement('div');
@@ -282,8 +291,6 @@
       balloon.remove();
       setTimeout(() => createBalloon(['rgba(190, 18, 60, 0.65)', 'rgba(225, 29, 72, 0.55)', 'rgba(217, 119, 6, 0.45)']), 3000);
     }
-
-    initBackground();
 
     let step = 1;
     let holdProgress = 0;
@@ -362,6 +369,7 @@
 
     function render() {
       const card = document.getElementById('card');
+      if (!card) return;
 
       if (step === 1) {
         card.innerHTML = `
@@ -495,4 +503,315 @@
                 <option value="" disabled ${!comAnswers[idx] ? 'selected' : ''}>Select your promise...</option>
                 ${opts}
               </select>
-            </div
+            </div>
+          `;
+        }).join('');
+
+        let allCompleted = completedCount === comQuestions.length;
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between mb-1">
+            <h2 class="text-xl font-bold text-pink-600">💌 Commitments</h2>
+            <span class="text-xs font-bold text-pink-500 bg-pink-100 px-2 py-1 rounded-full">Progress: ${completedCount} / 5</span>
+          </div>
+          <p class="text-xs text-gray-500 mb-4">Answer all commitments to sign ❤️</p>
+          <div class="max-h-64 overflow-y-auto pr-1">${questionsHtml}</div>
+          
+          ${allCompleted ? `
+            <div class="mt-3 p-2 bg-pink-100 rounded-xl text-xs text-pink-700 font-semibold animate-pulse">
+              Bas saare commitments ho gaye... 👀❤️<br/>Ab ek last sign banta hai ✍️
+            </div>
+            <button onclick="setStep(10)" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg active:scale-95 transition w-full mt-3">Go to Signature ✍️</button>
+          ` : `
+            <p class="text-[11px] text-gray-400 mt-2">Please answer all 5 questions to proceed.</p>
+          `}
+        `;
+      } 
+      else if (step === 10) {
+        card.innerHTML = `
+          <h2 class="text-lg font-bold text-pink-600 mb-1">✍️ Digital Signature</h2>
+          <p class="text-xs text-gray-600 mb-3">"Main, Riya, eh saare commitments dil naal accept kardi aa. ❤️"</p>
+          
+          <div class="relative mx-auto mb-2">
+            <canvas id="sigCanvas" width="280" height="100" class="border-2 border-dashed border-pink-400 rounded-xl bg-white mx-auto touch-none"></canvas>
+            <p class="text-[10px] text-gray-400 mt-1">Apna cute jeha sign kar de ✍️</p>
+          </div>
+
+          <div class="flex gap-2">
+            <button onclick="clearCanvas()" class="w-1/3 bg-gray-200 text-gray-700 py-2 rounded-xl text-xs font-semibold">Clear</button>
+            <button id="sigBtn" onclick="submitCommitment()" class="w-2/3 bg-gradient-to-r from-pink-500 to-rose-500 text-white py-2 rounded-xl text-xs font-semibold shadow-md ${hasSigned ? '' : 'opacity-50 pointer-events-none'}">Sign & Continue ❤️</button>
+          </div>
+        `;
+        setTimeout(initCanvas, 50);
+      }
+      else if (step === 11) {
+        let listItems = comQuestions.map((q, idx) => `
+          <div class="text-left border-b border-pink-100 pb-1">
+            <p class="font-bold text-gray-700 text-[11px]">✓ ${q.q}</p>
+            <p class="text-pink-600 font-semibold text-[11px]">👉 ${comAnswers[idx]}</p>
+          </div>
+        `).join('');
+
+        card.innerHTML = `
+          <div class="bg-gradient-to-b from-pink-50 to-white p-4 rounded-2xl border-2 border-pink-300 shadow-xl text-center">
+            <h3 class="text-base font-extrabold text-pink-600 mb-2">💌 Keepsake Commitment Card</h3>
+            <div class="space-y-2 mb-3 max-h-48 overflow-y-auto pr-1">${listItems}</div>
+            
+            <div class="border-t border-pink-200 pt-2 mt-2">
+              <p class="text-[10px] text-gray-400 font-bold mb-1">Riya's Digital Signature ✍️</p>
+              <img src="${userSignatureData}" alt="Signature" class="h-12 mx-auto border border-pink-200 rounded-lg bg-white p-1 shadow-sm"/>
+              <p class="text-[10px] text-pink-500 italic mt-2">"Made with a little promise & a lot of heart. ❤️"</p>
+            </div>
+          </div>
+
+          <p class="text-xs text-pink-600 font-bold mt-3">Okay... hun eh promise officially save ho gayi. 😌❤️</p>
+          <button onclick="setStep(12)" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg active:scale-95 transition w-full mt-3">Proceed to Photo Garland 📸</button>
+        `;
+      }
+      else if (step === 12) {
+        let garlandCards = photos.map((p, i) => `
+          <div class="garland-photo inline-block bg-white p-2 rounded-xl shadow-md border border-pink-200 m-1 w-24">
+            <img src="${p.src}" class="w-full h-20 object-cover rounded-lg mb-1"/>
+            <p class="text-[9px] font-bold text-pink-600 truncate">${p.caption}</p>
+          </div>
+        `).join('');
+
+        card.innerHTML = `
+          <h2 class="text-base font-bold text-pink-600 mb-1">📸 Memory Garland</h2>
+          <p class="text-xs text-gray-600 italic mb-4">"Kujh yaadaan… jo hamesha special rehn giyaan. ✨"</p>
+          
+          <div class="bg-slate-900 p-3 rounded-2xl mb-4 border border-pink-300 overflow-x-auto whitespace-nowrap">
+            <div class="w-full h-1 bg-amber-200/40 mb-2 rounded-full relative"></div>
+            ${garlandCards}
+          </div>
+
+          <button onclick="setStep(13)" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg active:scale-95 transition w-full">Proceed to Cake 🎂</button>
+        `;
+      }
+      else if (step === 13) {
+        card.innerHTML = `
+          <h2 class="text-xl font-bold text-pink-600 mb-1">Tap the Cake! 🎂</h2>
+          <div class="flex justify-center gap-1 mb-1">
+            <span class="animate-pulse">🕯️</span>
+            <span class="animate-pulse delay-100">🕯️</span>
+            <span class="animate-pulse delay-200">🕯️</span>
+          </div>
+          <div onclick="handleCakeClick()" class="text-7xl my-4 cursor-pointer active:scale-125 transition transform select-none inline-block">🎂✨</div>
+          <p class="text-xs text-pink-500 font-bold mb-4">Tap cake for surprise rainfall! 💌</p>
+
+          <div id="nextBox" class="hidden">
+            <p class="text-xs font-bold text-gray-700 mb-2">Ready for one last thing? ✨</p>
+            <button onclick="setStep(14)" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg active:scale-95 transition w-full">NEXT →</button>
+          </div>
+        `;
+      }
+      else if (step === 14) {
+        card.innerHTML = `
+          <div class="grid grid-cols-3 gap-1 mb-3 bg-pink-100 p-2 rounded-2xl border border-pink-200">
+            <img src="photo1.jpg" class="h-16 w-full object-cover rounded-lg rotate-[-3deg] shadow-sm transition hover:scale-110"/>
+            <img src="photo2.jpg" class="h-16 w-full object-cover rounded-lg rotate-[2deg] shadow-sm transition hover:scale-110"/>
+            <img src="photo3.jpg" class="h-16 w-full object-cover rounded-lg rotate-[-2deg] shadow-sm transition hover:scale-110"/>
+          </div>
+
+          <h2 class="text-base font-extrabold text-pink-600 mb-2 text-glow">Happy Birthday Riya 🎂❤️</h2>
+
+          <div class="text-left bg-pink-50/80 p-3.5 rounded-2xl border border-pink-200 text-xs text-gray-700 leading-relaxed space-y-2.5 max-h-64 overflow-y-auto mb-3 shadow-inner">
+            <p class="reveal-line" style="animation-delay: 0.2s;">Rabb kare tu hamesha eddan hi hassdi reh, khush reh te life nu apne tareeke naal enjoy kardi reh. 🫶</p>
+            <p class="reveal-line" style="animation-delay: 0.6s;">Tere saare dreams taan menu honestly ni pta 🤭, par jo vi ne... saare hi poore hon. Tu life ch jo vi achieve karna chaundi aa, Rabb kare oh sab tenu mile, te har oh cheez mile jidi tu deserve kardi aa. ❤️</p>
+            <p class="reveal-line" style="animation-delay: 1.0s;">Te haan... ohna saare dreams ch menu chhad ke hor sab kuchh mil jaave, eh taan bilkul ni hona chahida 😂🤭❤️<br/><span class="font-bold text-pink-600">Thodi jehi jagah mere layi vi rakh lavi, baaki main adjust karunga. 😌</span></p>
+            <p class="reveal-line" style="animation-delay: 1.4s;">Sadi gall hamesha hundi vi ni, kade-kade hi hundi aa 🤭, par jinni vi hundi aa, oh apne aap ch special aa.<br/>Bas eddan hi kade-kade meri bak-bak sun lya kar. 😂</p>
+            <p class="reveal-line" style="animation-delay: 1.8s;">Bas ik gall hamesha yaad rakhi—<br/>khush rena, apni smile nu kade na khona te jo vi dil ch aa, ohde piche zaroor jaana. ✨</p>
+            <p class="reveal-line" style="animation-delay: 2.2s;">Te haan Riya... birthday tera aa, wishaan vi teriyan ne, par thoda credit menu vi de di... inni sohni wish likhan layi. 😂🤭❤️</p>
+            <p class="font-bold text-pink-600 text-center pt-1 reveal-line" style="animation-delay: 2.6s;">Happy Birthday once again Riya 🎂❤️</p>
+            <p class="text-center font-medium reveal-line" style="animation-delay: 3.0s;">Rabb kare aun wala har din tere layi hor vi sohnaa hove. ✨</p>
+          </div>
+
+          <p class="text-[11px] text-pink-600 italic font-semibold mb-3 reveal-line" style="animation-delay: 3.4s;">"Made with memories, thodi bak-bak te bohot saara dil. 🐒❤️"</p>
+          <button onclick="setStep(15)" class="bg-gradient-to-r from-pink-600 to-rose-600 text-white px-6 py-2.5 rounded-full font-bold text-xs shadow-md active:scale-95 transition w-full">Finally Close 🔒</button>
+        `;
+      }
+      else if (step === 15) {
+        card.innerHTML = `
+          <div class="text-6xl mb-3">🎁✨</div>
+          <h2 class="text-2xl font-bold text-pink-600 mb-2">Surprise Completed!</h2>
+          <p class="text-gray-600 text-sm mb-6">Have a wonderful and blessed day ahead, Riya! ❤️</p>
+          <button onclick="setStep(1)" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-full text-xs font-semibold">Replay 🔄</button>
+        `;
+      }
+    }
+
+    function setStep(s) { step = s; render(); }
+    function prevPhoto() { if (activePhotoIdx > 0) { activePhotoIdx--; render(); } }
+    function nextPhoto() { if (activePhotoIdx < photos.length - 1) { activePhotoIdx++; render(); } }
+
+    function startHold(e) {
+      if (e) e.preventDefault();
+      const line = document.getElementById('scanLine');
+      if (line) line.classList.remove('hidden');
+
+      if (holdInterval) clearInterval(holdInterval);
+      holdInterval = setInterval(() => {
+        holdProgress += 25;
+        if (holdProgress >= 100) {
+          clearInterval(holdInterval);
+          holdInterval = null;
+          holdProgress = 100;
+          setStep(4);
+        } else {
+          const bar = document.getElementById('fpBar');
+          const txt = document.getElementById('fpText');
+          if (bar) bar.style.width = holdProgress + '%';
+          if (txt) txt.innerText = holdProgress + '%';
+        }
+      }, 900);
+    }
+
+    function endHold(e) {
+      if (e) e.preventDefault();
+      if (holdProgress < 100) {
+        if (holdInterval) clearInterval(holdInterval);
+        holdInterval = null;
+        holdProgress = 0;
+        const line = document.getElementById('scanLine');
+        if (line) line.classList.add('hidden');
+        const bar = document.getElementById('fpBar');
+        const txt = document.getElementById('fpText');
+        if (bar) bar.style.width = '0%';
+        if (txt) txt.innerText = '0%';
+      }
+    }
+
+    function handleRelAnswer(ansText, react) {
+      relAnswers.push({ q: relQuestions[relIndex].q, a: ansText });
+      relReaction = react;
+      render();
+      setTimeout(() => {
+        relReaction = '';
+        if (relIndex < relQuestions.length - 1) { relIndex++; } else { step = 9; }
+        render();
+      }, 1100);
+    }
+
+    function saveComAnswer(idx, val) {
+      comAnswers[idx] = val;
+      render();
+    }
+
+    function initCanvas() {
+      const canvas = document.getElementById('sigCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      
+      const getPos = e => {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: (e.touches ? e.touches[0].clientX : e.clientX) - rect.left,
+          y: (e.touches ? e.touches[0].clientY : e.clientY) - rect.top
+        };
+      };
+
+      const startDraw = e => {
+        isDrawing = true; hasSigned = true;
+        const pos = getPos(e);
+        ctx.beginPath(); ctx.moveTo(pos.x, pos.y);
+        document.getElementById('sigBtn').classList.remove('opacity-50', 'pointer-events-none');
+      };
+
+      const draw = e => {
+        if (!isDrawing) return;
+        const pos = getPos(e);
+        ctx.strokeStyle = '#e11d48'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+        ctx.lineTo(pos.x, pos.y); ctx.stroke();
+      };
+
+      const stopDraw = () => isDrawing = false;
+
+      canvas.onmousedown = startDraw; canvas.onmousemove = draw; canvas.onmouseup = stopDraw;
+      canvas.ontouchstart = startDraw; canvas.ontouchmove = draw; canvas.ontouchend = stopDraw;
+    }
+
+    function clearCanvas() {
+      const canvas = document.getElementById('sigCanvas');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        hasSigned = false;
+        document.getElementById('sigBtn').classList.add('opacity-50', 'pointer-events-none');
+      }
+    }
+
+    function submitCommitment() {
+      const canvas = document.getElementById('sigCanvas');
+      if (canvas) userSignatureData = canvas.toDataURL();
+      
+      let payload = {
+        to_email: "bobimanshal07@gmail.com",
+        relationship_answers: JSON.stringify(relAnswers, null, 2),
+        commitments: JSON.stringify(comAnswers, null, 2),
+        signature_image: userSignatureData
+      };
+
+      if (typeof emailjs !== 'undefined') {
+        emailjs.send("service_92h11mv", "template_jqwk8c3", payload)
+          .then(function(response) {
+             console.log('SUCCESS!', response.status, response.text);
+          }, function(error) {
+             console.log('FAILED...', error);
+          });
+      }
+      
+      setStep(11);
+    }
+
+    function handleCakeClick() {
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
+      }
+
+      const messages = [
+        "Happy Birthday ❤️", "Love you 🫶", "Take care ✨", "Meri jaan 💗",
+        "Hamesha khush reh 🌷", "Smile maintain rakh 😊", "Tu bohot special aa ✨",
+        "Khush reh hamesha ❤️", "Apne dreams chase kardi reh ✨", "Bas eddan hi smile kardi reh 🫶"
+      ];
+
+      for (let i = 0; i < 6; i++) {
+        const el = document.createElement('div');
+        el.className = 'falling-msg';
+        el.innerText = messages[Math.floor(Math.random() * messages.length)];
+        el.style.left = Math.random() * 75 + 10 + 'vw';
+        el.style.animationDuration = (Math.random() * 1.5 + 2.5) + 's';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3500);
+      }
+
+      const nextBox = document.getElementById('nextBox');
+      if (nextBox) nextBox.classList.remove('hidden');
+    }
+
+    function updateTimer() {
+      const target = new Date('2026-09-16T00:00:00+05:30').getTime();
+      const interval = setInterval(() => {
+        const now = new Date().getTime();
+        const diff = target - now;
+        const disp = document.getElementById('timerDisplay');
+        if (!disp) { clearInterval(interval); return; }
+        if (diff <= 0) {
+          disp.innerHTML = `<h1 class="col-span-4 text-xs font-bold text-pink-600 animate-bounce">It's Riya's Birthday! 🎂❤️</h1>`;
+          clearInterval(interval);
+        } else {
+          const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const s = Math.floor((diff % (1000 * 60)) / 1000);
+          disp.innerHTML = `
+            <div class="bg-pink-50 p-1.5 rounded-xl"><span class="text-sm text-pink-600">${d}</span><br/><span class="text-[9px] text-gray-400">Days</span></div>
+            <div class="bg-pink-50 p-1.5 rounded-xl"><span class="text-sm text-pink-600">${h}</span><br/><span class="text-[9px] text-gray-400">Hours</span></div>
+            <div class="bg-pink-50 p-1.5 rounded-xl"><span class="text-sm text-pink-600">${m}</span><br/><span class="text-[9px] text-gray-400">Mins</span></div>
+            <div class="bg-pink-50 p-1.5 rounded-xl"><span class="text-sm text-pink-600">${s}</span><br/><span class="text-[9px] text-gray-400">Secs</span></div>
+          `;
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
