@@ -1,1316 +1,520 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#09060b">
-
-<title>Ek Chhoti Si Cheez ❤️</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
-body{
-    background:#08060a;
-    color:#fff;
-    font-family:Georgia,"Times New Roman",serif;
-    overflow-x:hidden;
-}
-
-/* =========================
-   GLOBAL
-========================= */
-
-section{
-    min-height:100vh;
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:40px 20px;
-}
-
-.container{
-    width:min(900px,100%);
-    text-align:center;
-}
-
-.small{
-    font-family:Arial,sans-serif;
-    text-transform:uppercase;
-    letter-spacing:4px;
-    font-size:.65rem;
-    color:#c9a9b5;
-    margin-bottom:18px;
-}
-
-h1{
-    font-size:clamp(3.3rem,13vw,8rem);
-    line-height:.9;
-    font-weight:400;
-}
-
-h2{
-    font-size:clamp(2.1rem,7vw,4.5rem);
-    font-weight:400;
-    line-height:1.05;
-}
-
-p{
-    font-family:Arial,sans-serif;
-    color:#cfc6cd;
-    line-height:1.8;
-    font-size:.98rem;
-}
-
-.glow{
-    color:#ff9cbd;
-    text-shadow:
-        0 0 15px rgba(255,120,170,.35),
-        0 0 45px rgba(255,80,140,.15);
-}
-
-button{
-    border:1px solid rgba(255,255,255,.2);
-    background:rgba(255,255,255,.07);
-    color:#fff;
-    padding:14px 25px;
-    border-radius:50px;
-    font-family:Arial,sans-serif;
-    cursor:pointer;
-    backdrop-filter:blur(12px);
-    transition:.35s;
-}
-
-button:hover{
-    transform:translateY(-3px);
-    background:rgba(255,255,255,.13);
-}
-
-
-/* =========================
-   CINEMATIC BACKGROUND
-========================= */
-
-.background{
-    position:fixed;
-    inset:0;
-    z-index:-5;
-    background:
-        radial-gradient(
-            circle at 50% 45%,
-            rgba(255,80,140,.08),
-            transparent 35%
-        ),
-        #08060a;
-}
-
-.noise{
-    position:fixed;
-    inset:0;
-    z-index:50;
-    pointer-events:none;
-    opacity:.035;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
-}
-
-.vignette{
-    position:fixed;
-    inset:0;
-    z-index:10;
-    pointer-events:none;
-    background:radial-gradient(
-        circle,
-        transparent 35%,
-        rgba(0,0,0,.65) 100%
-    );
-}
-
-
-/* =========================
-   STARS
-========================= */
-
-.stars{
-    position:fixed;
-    inset:0;
-    z-index:-2;
-    overflow:hidden;
-}
-
-.star{
-    position:absolute;
-    width:2px;
-    height:2px;
-    border-radius:50%;
-    background:white;
-    opacity:.25;
-    animation:twinkle 4s infinite alternate;
-}
-
-@keyframes twinkle{
-    from{
-        opacity:.1;
-        transform:scale(.6);
-    }
-    to{
-        opacity:.8;
-        transform:scale(1.5);
-    }
-}
-
-
-/* =========================
-   CINEMATIC BARS
-========================= */
-
-.cinema-bar{
-    position:fixed;
-    left:0;
-    width:100%;
-    height:7vh;
-    background:#000;
-    z-index:100;
-    pointer-events:none;
-}
-
-.top-bar{
-    top:0;
-}
-
-.bottom-bar{
-    bottom:0;
-}
-
-
-/* =========================
-   INTRO
-========================= */
-
-#intro{
-    min-height:100svh;
-}
-
-.intro-content{
-    animation:introAppear 2s ease forwards;
-}
-
-@keyframes introAppear{
-    from{
-        opacity:0;
-        transform:translateY(25px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-/* Monkey */
-
-.monkey-wrap{
-    height:155px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin-bottom:5px;
-}
-
-.monkey{
-    font-size:6.5rem;
-    filter:drop-shadow(0 10px 20px rgba(0,0,0,.5));
-    animation:
-        monkeyFloat 3s ease-in-out infinite,
-        monkeyAppear 1.2s ease;
-}
-
-@keyframes monkeyAppear{
-    from{
-        opacity:0;
-        transform:scale(.3) translateY(50px);
-    }
-    to{
-        opacity:1;
-        transform:scale(1) translateY(0);
-    }
-}
-
-@keyframes monkeyFloat{
-    0%,100%{
-        transform:translateY(0) rotate(-2deg);
-    }
-    50%{
-        transform:translateY(-9px) rotate(2deg);
-    }
-}
-
-.intro-line{
-    margin:15px auto 30px;
-    max-width:450px;
-}
-
-.intro-line span{
-    display:block;
-    margin:10px 0;
-}
-
-.start-btn{
-    margin-top:8px;
-}
-
-
-/* =========================
-   TRANSITION
-========================= */
-
-#transition{
-    min-height:100vh;
-}
-
-.fade-text{
-    opacity:0;
-    transform:translateY(20px);
-    transition:1s;
-}
-
-.fade-text.show{
-    opacity:1;
-    transform:translateY(0);
-}
-
-
-/* =========================
-   COUNTDOWN
-========================= */
-
-.countdown-section{
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(255,100,160,.08),
-            transparent 45%
-        );
-}
-
-.countdown{
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:12px;
-    margin:35px 0;
-}
-
-.time{
-    width:85px;
-    padding:18px 8px;
-    border:1px solid rgba(255,255,255,.12);
-    border-radius:18px;
-    background:rgba(255,255,255,.035);
-    backdrop-filter:blur(15px);
-}
-
-.time strong{
-    display:block;
-    font-size:2rem;
-    font-weight:400;
-    color:#ffc0d2;
-}
-
-.time span{
-    font-family:Arial,sans-serif;
-    color:#898087;
-    font-size:.62rem;
-    letter-spacing:2px;
-    text-transform:uppercase;
-}
-
-
-/* =========================
-   MEMORY FILM
-========================= */
-
-.memory-section{
-    display:block;
-    padding-top:100px;
-}
-
-.memory-title{
-    text-align:center;
-    margin-bottom:45px;
-}
-
-.film{
-    width:min(760px,100%);
-    margin:auto;
-}
-
-.memory{
-    min-height:75vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin-bottom:70px;
-    position:relative;
-}
-
-.memory-card{
-    width:min(520px,92%);
-    padding:10px 10px 22px;
-    background:#eee7df;
-    color:#222;
-    box-shadow:
-        0 30px 80px rgba(0,0,0,.55);
-    transform:rotate(-2deg);
-    transition:1s;
-}
-
-.memory:nth-child(even) .memory-card{
-    transform:rotate(2deg);
-}
-
-.memory-card:hover{
-    transform:rotate(0) scale(1.02);
-}
-
-.memory-card img{
-    width:100%;
-    aspect-ratio:4/5;
-    object-fit:cover;
-    display:block;
-    background:#d7d0c8;
-}
-
-.memory-caption{
-    font-family:"Courier New",monospace;
-    color:#3b3437;
-    padding-top:16px;
-    font-size:.82rem;
-}
-
-
-/* =========================
-   LETTER
-========================= */
-
-.letter-section{
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(255,160,190,.07),
-            transparent 45%
-        );
-}
-
-.letter{
-    width:min(650px,100%);
-    padding:42px 30px;
-    border:1px solid rgba(255,255,255,.1);
-    border-radius:25px;
-    background:rgba(255,255,255,.035);
-    box-shadow:0 30px 100px rgba(0,0,0,.25);
-}
-
-.letter-text{
-    min-height:160px;
-    margin-top:25px;
-    font-size:1rem;
-}
-
-.cursor{
-    border-right:2px solid #ff9cbd;
-    animation:blink .8s infinite;
-}
-
-@keyframes blink{
-    50%{border-color:transparent}
-}
-
-
-/* =========================
-   SECRET
-========================= */
-
-.secret-section{
-    min-height:80vh;
-}
-
-.secret-box{
-    width:min(600px,100%);
-    padding:45px 25px;
-    border:1px solid rgba(255,255,255,.12);
-    border-radius:30px;
-    background:rgba(255,255,255,.035);
-}
-
-.secret-content{
-    display:none;
-    margin-top:30px;
-    animation:secretIn 1s ease;
-}
-
-@keyframes secretIn{
-    from{
-        opacity:0;
-        filter:blur(10px);
-        transform:scale(.95);
-    }
-    to{
-        opacity:1;
-        filter:blur(0);
-        transform:scale(1);
-    }
-}
-
-
-/* =========================
-   FINAL
-========================= */
-
-#final{
-    min-height:100svh;
-    overflow:hidden;
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(255,70,130,.13),
-            transparent 50%
-        );
-}
-
-.final-content{
-    position:relative;
-    z-index:2;
-}
-
-.cake{
-    font-size:6rem;
-    margin:25px 0;
-    animation:cakeFloat 3s ease-in-out infinite;
-}
-
-@keyframes cakeFloat{
-    0%,100%{
-        transform:translateY(0);
-    }
-    50%{
-        transform:translateY(-12px);
-    }
-}
-
-.final-message{
-    max-width:650px;
-    margin:25px auto;
-}
-
-.signature{
-    margin-top:30px;
-    color:#ffabc5;
-    font-size:1.05rem;
-}
-
-
-/* =========================
-   CONFETTI
-========================= */
-
-.confetti{
-    position:absolute;
-    width:7px;
-    height:12px;
-    top:-20px;
-    opacity:0;
-    animation:fall 4s linear forwards;
-}
-
-@keyframes fall{
-    0%{
-        opacity:1;
-        transform:translateY(0) rotate(0);
-    }
-    100%{
-        opacity:0;
-        transform:translateY(110vh) rotate(720deg);
-    }
-}
-
-
-/* =========================
-   MUSIC
-========================= */
-
-.music{
-    position:fixed;
-    right:18px;
-    bottom:20px;
-    width:48px;
-    height:48px;
-    padding:0;
-    border-radius:50%;
-    z-index:120;
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:600px){
-
-    .cinema-bar{
-        height:4vh;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Birthday Surprise for Riya 🎉</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <style>
+    /* Complete disable for long-press copy/paste popups */
+    * {
+      -webkit-touch-callout: none !important;
+      -webkit-user-select: none !important;
+      -khtml-user-select: none !important;
+      -moz-user-select: none !important;
+      -ms-user-select: none !important;
+      user-select: none !important;
     }
 
-    .monkey{
-        font-size:5.5rem;
+    input, textarea {
+      -webkit-user-select: text !important;
+      user-select: text !important;
     }
 
-    .time{
-        width:70px;
-        padding:14px 5px;
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+    @keyframes scan {
+      0% { top: 0%; }
+      50% { top: 100%; }
+      100% { top: 0%; }
+    }
+    @keyframes fall {
+      0% { transform: translateY(-50px); opacity: 1; }
+      100% { transform: translateY(100vh); opacity: 0; }
     }
 
-    .time strong{
-        font-size:1.5rem;
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 50%, #f7accf 100%);
+      font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+      touch-action: manipulation;
     }
 
-    .letter{
-        padding:32px 20px;
+    #app-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      box-sizing: border-box;
     }
 
-    .memory{
-        min-height:65vh;
+    .card-box {
+      max-height: 90vh;
+      overflow-y: auto;
+      touch-action: pan-y;
+      -webkit-overflow-scrolling: touch;
     }
-}
-</style>
+
+    .bg-heart {
+      position: absolute;
+      color: rgba(255, 255, 255, 0.4);
+      animation: float 8s linear infinite;
+      pointer-events: none;
+    }
+
+    .scan-line {
+      position: absolute;
+      width: 100%;
+      height: 4px;
+      background: #ff3366;
+      box-shadow: 0 0 12px #ff3366, 0 0 25px #ff3366;
+      animation: scan 2s infinite ease-in-out;
+      pointer-events: none;
+    }
+
+    .falling-item {
+      position: fixed;
+      top: -50px;
+      z-index: 50;
+      pointer-events: none;
+      animation: fall 3s linear forwards;
+    }
+  </style>
 </head>
-
-
-<body>
-
-<div class="background"></div>
-<div class="stars" id="stars"></div>
-<div class="noise"></div>
-<div class="vignette"></div>
-
-<div class="cinema-bar top-bar"></div>
-<div class="cinema-bar bottom-bar"></div>
-
-
-<!-- OPTIONAL MUSIC
-     Same folder me birthday.mp3 rakho
--->
-<audio id="music" loop>
-    <source src="birthday.mp3" type="audio/mpeg">
-</audio>
-
-<button class="music" id="musicBtn" onclick="toggleMusic()">♪</button>
-
-
-<!-- ==================================================
-     1. OPENING
-================================================== -->
-
-<section id="intro">
-
-<div class="container intro-content">
-
-    <div class="monkey-wrap">
-        <div class="monkey">🐒</div>
-    </div>
-
-    <div class="small">Just for you</div>
-
-    <div class="intro-line">
-
-        <span>Oye… ruk zara 👀</span>
-
-        <span class="glow">Eh tere layi aa…</span>
-
-        <span>Bas end tak zaroor dekhna ❤️</span>
-
-    </div>
-
-    <button class="start-btn" onclick="begin()">
-        Chal, shuru kariye ✨
-    </button>
-
-</div>
-
-</section>
-
-
-<!-- ==================================================
-     2. CINEMATIC TRANSITION
-================================================== -->
-
-<section id="transition">
-
-<div class="container">
-
-    <div class="fade-text" id="transitionText">
-
-        <div class="small">Ik chhoti jehi journey...</div>
-
-        <h2>
-            Kujh gallan<br>
-            <span class="glow">kehniyan si. ❤️</span>
-        </h2>
-
-        <br>
-
-        <p>
-            Te sochiya… likhan di bajaye,
-            tere layi bana hi ditta. :)
-        </p>
-
-    </div>
-
-</div>
-
-</section>
-
-
-<!-- ==================================================
-     3. COUNTDOWN
-================================================== -->
-
-<section class="countdown-section">
-
-<div class="container">
-
-    <div class="small">The day is coming</div>
-
-    <h2>
-        Bas thoda hor… ✨
-    </h2>
-
-    <div class="countdown">
-
-        <div class="time">
-            <strong id="days">00</strong>
-            <span>Days</span>
-        </div>
-
-        <div class="time">
-            <strong id="hours">00</strong>
-            <span>Hours</span>
-        </div>
-
-        <div class="time">
-            <strong id="minutes">00</strong>
-            <span>Minutes</span>
-        </div>
-
-        <div class="time">
-            <strong id="seconds">00</strong>
-            <span>Seconds</span>
-        </div>
-
-    </div>
-
-    <p>
-        16 September ❤️
-    </p>
-
-</div>
-
-</section>
-
-
-<!-- ==================================================
-     4. MEMORIES
-================================================== -->
-
-<section class="memory-section">
-
-<div class="container">
-
-    <div class="memory-title">
-
-        <div class="small">Our little memories</div>
-
-        <h2>
-            Kujh moments...
-        </h2>
-
-        <p>
-            Jinna nu bas photo keh dena thoda unfair jeha hovega.
-        </p>
-
-    </div>
-
-
-    <div class="film">
-
-        <!-- MEMORY 1 -->
-
-        <div class="memory">
-
-            <div class="memory-card">
-
-                <img
-                    src="images/memory1.jpg"
-                    alt="Memory 1"
-                >
-
-                <div class="memory-caption">
-                    ik sohni jehi yaad ❤️
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- MEMORY 2 -->
-
-        <div class="memory">
-
-            <div class="memory-card">
-
-                <img
-                    src="images/memory2.jpg"
-                    alt="Memory 2"
-                >
-
-                <div class="memory-caption">
-                    eh moment vi yaad rehna ✨
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- MEMORY 3 -->
-
-        <div class="memory">
-
-            <div class="memory-card">
-
-                <img
-                    src="images/memory3.jpg"
-                    alt="Memory 3"
-                >
-
-                <div class="memory-caption">
-                    bas smile aa jandi ae :)
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- MEMORY 4 -->
-
-        <div class="memory">
-
-            <div class="memory-card">
-
-                <img
-                    src="images/memory4.jpg"
-                    alt="Memory 4"
-                >
-
-                <div class="memory-caption">
-                    one more for the memories ❤️
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-</section>
-
-
-<!-- ==================================================
-     5. LETTER
-================================================== -->
-
-<section class="letter-section">
-
-<div class="container">
-
-    <div class="letter">
-
-        <div class="small">Thodi jehi gall</div>
-
-        <h2>
-            Tere layi...
-        </h2>
-
-        <p
-            class="letter-text"
-            id="typedText"
-        ></p>
-
-    </div>
-
-</div>
-
-</section>
-
-
-<!-- ==================================================
-     6. SECRET
-================================================== -->
-
-<section class="secret-section">
-
-<div class="container">
-
-    <div class="secret-box">
-
-        <div class="small">One last little surprise</div>
-
-        <h2>
-            Ik gall hor...
-        </h2>
-
-        <br>
-
-        <p>
-            Eh button dabaa ke dekh. 👀
-        </p>
-
-        <br>
-
-        <button onclick="reveal()">
-            Reveal ❤️
-        </button>
-
-
-        <div
-            class="secret-content"
-            id="secretContent"
-        >
-
-            <h2 class="glow">
-                Tu genuinely special ae.
-            </h2>
-
-            <br>
-
-            <p>
-                Te meri wish bas eh nahi
-                ke tera birthday changa jaave...
-            </p>
-
-            <br>
-
-            <p>
-                Meri wish ae ke tera
-                poora saal changa jaave. ❤️
-            </p>
-
-        </div>
-
-    </div>
-
-</div>
-
-</section>
-
-
-<!-- ==================================================
-     7. FINAL
-================================================== -->
-
-<section id="final">
-
-<div class="container final-content">
-
-    <div class="small">
-        Finally...
-    </div>
-
-    <div class="cake">
-        🎂
-    </div>
-
-    <h1>
-        Happy Birthday
-        <br>
-        <span class="glow">Riya ❤️</span>
-    </h1>
-
-    <div class="final-message">
-
-        <p>
-            Rabb kare tu hamesha apne dreams nu chase kare,
-            apne aap te believe rakhe,
-            te har din thoda hor smile kare.
-        </p>
-
-        <br>
-
-        <p>
-            Tu jiddan di ae,
-            menu oh hi pasand ae.
-            Kise naal compare hon di lod nahi.
-            Bas apne aap nu hamesha
-            apni value yaad rakhin. ❤️
-        </p>
-
-        <br>
-
-        <p>
-            Te haan...
-            birthday taan har saal aauga,
-            par tere vargi person
-            har vaar nahi mil di.
-        </p>
-
-        <div class="signature">
-            — Tere layi, dil ton. ❤️
-        </div>
-
-    </div>
-
-</div>
-
-</section>
-
-
-<script>
-
-/* ==================================================
-   STARS
-================================================== */
-
-const stars = document.getElementById("stars");
-
-for(let i=0;i<100;i++){
-
-    const star = document.createElement("div");
-
-    star.className="star";
-
-    star.style.left=Math.random()*100+"%";
-    star.style.top=Math.random()*100+"%";
-
-    star.style.animationDelay=
-        Math.random()*4+"s";
-
-    stars.appendChild(star);
-}
-
-
-/* ==================================================
-   START
-================================================== */
-
-function begin(){
-
-    const music =
-        document.getElementById("music");
-
-    music.play()
-        .then(()=>{
-            document.getElementById("musicBtn")
-                .innerText="🔊";
-        })
-        .catch(()=>{});
-
-    document
-        .getElementById("transition")
-        .scrollIntoView({
-            behavior:"smooth"
-        });
-
-    setTimeout(()=>{
-
-        document
-            .getElementById("transitionText")
-            .classList.add("show");
-
-    },600);
-}
-
-
-/* ==================================================
-   COUNTDOWN
-================================================== */
-
-const birthday =
-    new Date("September 16, 2026 00:00:00").getTime();
-
-function countdown(){
-
-    const now =
-        new Date().getTime();
-
-    const difference =
-        birthday-now;
-
-    if(difference<=0){
-
-        document.getElementById("days")
-            .innerText="00";
-
-        document.getElementById("hours")
-            .innerText="00";
-
-        document.getElementById("minutes")
-            .innerText="00";
-
-        document.getElementById("seconds")
-            .innerText="00";
-
-        return;
+<body oncontextmenu="return false;">
+
+  <div id="bgHearts"></div>
+
+  <div id="app-container">
+    <div id="card" class="card-box bg-white/95 backdrop-blur-md p-6 rounded-3xl shadow-2xl text-center border border-pink-200 w-full max-w-md my-auto relative z-10"></div>
+  </div>
+
+  <script>
+    // Background Floating Emojis
+    const bgContainer = document.getElementById('bgHearts');
+    const bgEmojis = ['❤️', '💖', '✨', '🎈', '💕', '🌸'];
+    for (let i = 0; i < 16; i++) {
+      const el = document.createElement('div');
+      el.className = 'bg-heart';
+      el.innerText = bgEmojis[Math.floor(Math.random() * bgEmojis.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.top = Math.random() * 100 + 'vh';
+      el.style.fontSize = (Math.random() * 18 + 14) + 'px';
+      el.style.animationDuration = (Math.random() * 5 + 6) + 's';
+      bgContainer.appendChild(el);
     }
 
-    const d =
-        Math.floor(
-            difference/(1000*60*60*24)
-        );
+    let step = 1;
+    let holdProgress = 0;
+    let holdInterval = null;
 
-    const h =
-        Math.floor(
-            (difference%(1000*60*60*24))
-            /(1000*60*60)
-        );
+    let photos = [
+      { src: 'photo1.jpg', caption: 'Sweet Memory 💗' },
+      { src: 'photo2.jpg', caption: 'Sweet Memory 💗' },
+      { src: 'photo3.jpg', caption: 'Sweet Memory 💗' },
+      { src: 'photo4.jpg', caption: 'Sweet Memory 💗' },
+      { src: 'photo5.jpg', caption: 'Sweet Memory 💗' },
+      { src: 'photo6.jpg', caption: 'Sweet Memory 💗' }
+    ];
+    let activePhotoIdx = 0;
 
-    const m =
-        Math.floor(
-            (difference%(1000*60*60))
-            /(1000*60)
-        );
+    const relQuestions = [
+      {
+        q: '😌 Main jiddan da haan, tenu oh genuine lagda ya thoda zyada hi pagal?',
+        options: [
+          { text: 'Genuine ❤️', react: 'Aww! Tusi vi bhot pyare ho! 🥺❤️' },
+          { text: 'Cute pagal 😂', react: 'Haha! Pagal taan haan par sirf tere layi! 🤪' },
+          { text: 'Dono da mixture 😌', react: 'Best combination lagda fer taan! ✨' }
+        ]
+      },
+      {
+        q: '🫢 Meri kehdi gall ya aadat tenu kade-kade awkward ya annoying lagdi aa?',
+        options: [
+          { text: 'Baar-baar puchhna "ki hoya?" 😭', react: 'Care karda haan islayi puchhda haan! 🥺' },
+          { text: 'Thodi zyada care karna 😂', react: 'Care thodi zyada hi honi chahidi aa! 🥰' },
+          { text: 'Meri overthinking 😌', react: 'Aage ton ghata devanga overthinking! 🧠' },
+          { text: 'Kujh hor… 👀', react: 'Mainu dssna zaroor fer baad vich! 😂' }
+        ]
+      },
+      {
+        q: '🥹 Je by chance main tere naal gall karni band kar dawaan, ya sade vich koi misunderstanding ho jaave… tu aap mere naal gall karan di try karegi?',
+        options: [
+          { text: 'Haan ji, zaroor ❤️', react: 'Eh sun ke dil nu sukoon mileya! ❤️' },
+          { text: 'Pehla gussa karungi, fer aap gall karangi 😂', react: 'Thoda gussa vi zaroori aa! 😜' },
+          { text: 'Situation te depend karega 😌', react: 'Fair enough! Par gall kar leya karo! 🥹' },
+          { text: 'Apna answer likhungi ✍️', react: 'Aapda answer likh ke batao fer! 📝' }
+        ]
+      },
+      {
+        q: '🫶 Meri care ya meri gallan vichon kehdi cheez tenu sab ton zyada feel hundi aa ki "haan, eh banda genuinely care karda"?',
+        options: [
+          { text: 'Baar-baar tera haal puchhna ❤️', react: 'Tuhadi health/mood sab ton pehla! 🫶' },
+          { text: 'Tere chhote-chhote details yaad rakhna 🥹', react: 'Har choti gall yaad rehndi aa mainu! ✨' },
+          { text: 'Tere dreams te future nu seriously lena 💗', react: 'Tuhade supne mere supne han! 🌈' },
+          { text: 'Apna answer likhungi ✍️', react: 'Kujh khas hi hona fer taan! ❤️' }
+        ]
+      },
+      {
+        q: '💗 Last question: main jiddan da haan, ohnu change karna chaundi aa ya eda hi theek aa?',
+        options: [
+          { text: 'Eda hi ❤️', react: 'Bestest! Main vi eda hi rahunga! ❤️' },
+          { text: 'Thoda jeha change 😂', react: 'Chalo thoda adjust kar lavange! 😉' },
+          { text: 'Bilkul change nahi 🥹', react: 'Thank you for accepting me as I am! 💖' },
+          { text: 'Mainu sochan de 😌', react: 'Time lao, soch ke dasso! ⏱️' }
+        ]
+      }
+    ];
 
-    const s =
-        Math.floor(
-            (difference%(1000*60))
-            /1000
-        );
+    let relIndex = 0;
+    let relAnswers = [];
+    let relReaction = '';
 
-    document.getElementById("days")
-        .innerText=String(d).padStart(2,"0");
+    const comQuestions = [
+      { q: '😊 Apni sohni smile hamesha maintain rakhegi?', options: ['Haan ji, hamesha ❤️', 'Koshish poori rahugi 🥰', 'Reason tusi dinde rehna 😌'] },
+      { q: '🫶 Apni health da changi tarah dhyaan rakhegi?', options: ['Haan ji 💗', 'Hun ton pakka 😌', 'Tusi reminder dinde rehna 😂'] },
+      { q: '💗 Tu kade vi apne aap nu kise ton ghatt nahi samjhegi?', options: ['Haan ji, kade vi nahi ❤️', 'Mainu pata aa meri value 😌', 'Tusi yaad karwa dinde rehna 😂', 'Eh taan pakka aa 🥰'] },
+      { q: '😂 Birthday party kadon deni aa?', options: ['Jaldi hi 🎂❤️', 'Milange odo party pakki 😌', 'Google Pay available nahi hai 😂', 'Tusi aayo, fer party dungi 😌❤️', 'Apna answer likhungi ✍️'] },
+      { q: '🌱 Apne future layi mehnat karna kabhi give up nahi karegi?', options: ['Never ❤️', 'Thak sakdi aa, rukangi nahi 💪', 'Tusi motivation dinde rehna 😭😂', 'Apna answer likhungi ✍️'] }
+    ];
 
-    document.getElementById("hours")
-        .innerText=String(h).padStart(2,"0");
+    let comIndex = 0;
+    let comAnswers = [];
+    let cakeClicks = 0;
+    let isDrawing = false;
+    let hasSigned = false;
 
-    document.getElementById("minutes")
-        .innerText=String(m).padStart(2,"0");
+    function render() {
+      const card = document.getElementById('card');
 
-    document.getElementById("seconds")
-        .innerText=String(s).padStart(2,"0");
-}
+      // STEP 1: COUNTDOWN AT START
+      if (step === 1) {
+        card.innerHTML = `
+          <div class="text-5xl mb-2">⏳✨</div>
+          <h2 class="text-xl font-bold text-pink-600 mb-4">Riya's Birthday Countdown 🎂❤️</h2>
+          <div id="timerDisplay" class="grid grid-cols-4 gap-2 text-center font-bold text-gray-700 mb-6"></div>
+          <button onclick="setStep(2)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition w-full">Start Surprise 🎁✨</button>
+        `;
+        updateTimer();
+      } 
+      // STEP 2: SPECIAL LETTER
+      else if (step === 2) {
+        card.innerHTML = `
+          <div class="text-6xl mb-3 animate-bounce">🐒✉️</div>
+          <h2 class="text-2xl font-bold text-pink-600 mb-2">A Special Wish For Riya ✨</h2>
+          <p class="text-gray-600 mb-6">Tuhade layi ek chhota jeha pyara surprise!</p>
+          <button onclick="setStep(3)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition">Open Letter 💌</button>
+        `;
+      } 
+      // STEP 3: BIOMETRIC SCANNER (Hold for 4-5 Seconds)
+      else if (step === 3) {
+        card.innerHTML = `
+          <h2 class="text-xl font-bold text-gray-800 mb-1">🔐 Biometric Verification</h2>
+          <p class="text-xs text-gray-500 mb-5">Click and HOLD finger for 4 seconds!</p>
+          
+          <div id="fpBox" class="relative w-28 h-32 mx-auto mb-5 bg-pink-50 rounded-2xl border-2 border-pink-400 flex items-center justify-center overflow-hidden cursor-pointer shadow-md"
+               oncontextmenu="return false;"
+               onmousedown="startHold(event)" onmouseup="endHold(event)"
+               ontouchstart="startHold(event)" ontouchend="endHold(event)">
+            <div id="scanLine" class="scan-line hidden"></div>
+            <svg class="w-16 h-20 text-pink-500 pointer-events-none opacity-80" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 1C8.14 1 5 4.14 5 8v1h2V8c0-2.76 2.24-5 5-5s5 2.24 5 5v1h2V8c0-3.86-3.14-7-7-7zm-4 8c-2.21 0-4 1.79-4 4v3h2v-3c0-1.1.9-2 2-2s2 .9 2 2v3h2v-3c0-2.21-1.79-4-4-4zm8 0c-.55 0-1 .45-1 1v6c0 1.66-1.34 3-3 3s-3-1.34-3-3v-2H7v2c0 2.76 2.24 5 5 5s5-2.24 5-5v-6c0-.55-.45-1-1-1z"/>
+            </svg>
+          </div>
 
-countdown();
+          <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden mb-2">
+            <div id="fpBar" class="bg-pink-500 h-full transition-all duration-200" style="width: ${holdProgress}%"></div>
+          </div>
+          <p id="fpText" class="text-xs font-bold text-pink-500">${holdProgress}%</p>
+        `;
+      } 
+      // STEP 4: READY SCREEN
+      else if (step === 4) {
+        card.innerHTML = `
+          <h2 class="text-2xl font-bold text-pink-600 mb-6">Are You Ready For The Surprise? 💗</h2>
+          <button onclick="setStep(5)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition">Yes, I am Ready! ✨</button>
+        `;
+      }
+      // STEP 5: HAPPY BIRTHDAY HEADER
+      else if (step === 5) {
+        card.innerHTML = `
+          <h1 class="text-3xl font-extrabold text-pink-600 mb-6">🎉 Happy Birthday Riya ❤️ 🎂</h1>
+          <button onclick="setStep(6)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition">Next ✨</button>
+        `;
+      } 
+      // STEP 6: FIRST WISH
+      else if (step === 6) {
+        card.innerHTML = `
+          <div class="text-5xl mb-4">💌</div>
+          <p class="text-gray-700 leading-relaxed text-base mb-6">
+            "Rabb kare tuhada eh saal khushiyan, achhi health te kamyabi naal bharya rahe. Hamesha eda hi smile karde raho! ✨❤️"
+          </p>
+          <button onclick="setStep(7)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition">Chalo agge →</button>
+        `;
+      } 
+      // STEP 7: MEMORIES GALLERY
+      else if (step === 7) {
+        card.innerHTML = `
+          <h2 class="text-xl font-bold text-pink-600">Some Sweet Moments 💗</h2>
+          <p class="text-xs text-gray-400 mb-3">Swipe or tap arrows</p>
+          <div class="bg-pink-50 p-3 rounded-2xl shadow-inner border border-pink-100">
+            <img src="${photos[activePhotoIdx].src}" alt="Memory" class="w-full h-48 object-cover rounded-xl mb-3" onerror="this.src='https://via.placeholder.com/300x200?text=Photo+1'"/>
+            <input type="text" value="${photos[activePhotoIdx].caption}" onchange="updateCaption(this.value)" class="w-full text-center bg-transparent border-b border-pink-300 text-sm font-medium text-gray-700 focus:outline-none"/>
+          </div>
+          <div class="flex items-center justify-center gap-4 my-3">
+            <button ${activePhotoIdx === 0 ? 'disabled' : ''} onclick="prevPhoto()" class="bg-pink-500 text-white px-3 py-1 rounded-lg text-sm disabled:opacity-30">◀</button>
+            <span class="text-xs font-semibold text-gray-500">${activePhotoIdx + 1} / ${photos.length}</span>
+            <button ${activePhotoIdx === photos.length - 1 ? 'disabled' : ''} onclick="nextPhoto()" class="bg-pink-500 text-white px-3 py-1 rounded-lg text-sm disabled:opacity-30">▶</button>
+          </div>
+          <button onclick="setStep(8)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition w-full">Agge Chalo →</button>
+        `;
+      } 
+      // STEP 8: RELATIONSHIP QUESTIONS
+      else if (step === 8) {
+        let q = relQuestions[relIndex];
+        let opts = q.options.map((opt) => `
+          <button onclick="handleRelAnswer('${opt.text}', '${opt.react}')" class="w-full border border-pink-400 text-pink-600 rounded-xl py-2 px-3 text-sm font-medium active:bg-pink-50 transition mb-2">
+            ${opt.text}
+          </button>
+        `).join('');
+        card.innerHTML = `
+          <span class="text-xs font-bold text-pink-400 uppercase tracking-widest">Question ${relIndex + 1} / 5</span>
+          <p class="text-sm font-semibold text-gray-800 my-3">${q.q}</p>
+          <div class="space-y-1">${opts}</div>
+          <p id="relReact" class="text-xs font-bold text-pink-600 mt-3 min-h-[20px] ${relReaction ? 'animate-bounce' : ''}">${relReaction}</p>
+        `;
+      } 
+      // STEP 9: COMMITMENT QUESTIONS
+      else if (step === 9) {
+        let q = comQuestions[comIndex];
+        let opts = q.options.map((opt) => `
+          <button onclick="handleComAnswer('${opt}')" class="w-full border border-pink-400 text-pink-600 rounded-xl py-2 px-3 text-sm font-medium active:bg-pink-50 transition mb-2">
+            ${opt}
+          </button>
+        `).join('');
+        card.innerHTML = `
+          <span class="text-xs font-bold text-pink-400 uppercase tracking-widest">Commitment ${comIndex + 1} / 5</span>
+          <p class="text-sm font-semibold text-gray-800 my-3">${q.q}</p>
+          <div class="space-y-1">${opts}</div>
+        `;
+      } 
+      // STEP 10: AGREEMENT & SIGNATURE
+      else if (step === 10) {
+        let ansList = comAnswers.map(item => `
+          <div>
+            <p class="font-bold text-gray-700">Q: ${item.q}</p>
+            <p class="text-pink-600">Ans: ${item.a}</p>
+          </div>
+        `).join('');
+        card.innerHTML = `
+          <h2 class="text-xl font-bold text-pink-600 mb-2">📝 Commitment Agreement</h2>
+          <div class="text-left bg-pink-50 p-3 rounded-xl text-xs space-y-2 max-h-36 overflow-y-auto mb-3 border border-pink-100">${ansList}</div>
+          <p class="text-xs text-gray-500 mb-2">Sign below (Riya):</p>
+          <canvas id="sigCanvas" width="280" height="90" class="border border-dashed border-pink-400 rounded-xl bg-white mx-auto"></canvas>
+          <button id="sigBtn" onclick="setStep(11)" class="${hasSigned ? '' : 'hidden'} bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition w-full mt-3">Accept & Proceed 🎂</button>
+        `;
+        setTimeout(initCanvas, 50);
+      } 
+      // STEP 11: CAKE WITH RAINFALL
+      else if (step === 11) {
+        card.innerHTML = `
+          <h2 class="text-xl font-bold text-pink-600 mb-1">Tap the Cake! 🎂</h2>
+          <div onclick="handleCakeClick()" class="text-7xl my-5 cursor-pointer active:scale-125 transition transform select-none">🎂✨</div>
+          <div id="cakeMsg" class="${cakeClicks > 0 ? '' : 'hidden'} space-y-1">
+            <p class="text-pink-600 font-bold text-sm">Happy Birthday Riya 🎂❤️</p>
+            <p class="text-xs text-gray-600">Love You ❤️ | Apna khayal rakhya kar 🫶</p>
+          </div>
+          <button id="finalBtn" onclick="setStep(12)" class="${cakeClicks >= 1 ? '' : 'hidden'} bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition w-full mt-5">Final Surprise 🎁❤️</button>
+        `;
+      } 
+      // STEP 12: FINAL PHOTO FIRST
+      else if (step === 12) {
+        card.innerHTML = `
+          <h2 class="text-xl font-bold text-pink-600 mb-3">Final Memory 💖</h2>
+          <img src="final.jpg" alt="Final Surprise" class="w-full rounded-2xl mb-4 object-cover max-h-64 shadow-md" onerror="this.src='https://via.placeholder.com/300x200?text=Final+Photo'"/>
+          <button onclick="setStep(13)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition w-full">Read Final Wish ✨</button>
+        `;
+      }
+      // STEP 13: FINAL DETAILED SURPRISE WISH
+      else if (step === 13) {
+        card.innerHTML = `
+          <div class="text-left bg-pink-50 p-4 rounded-2xl border border-pink-200 text-xs text-gray-700 leading-relaxed space-y-3 max-h-72 overflow-y-auto mb-4">
+            <p class="font-bold text-pink-600 text-sm text-center">Happy Birthday Riya 🎂❤️</p>
+            
+            <p>Rabb kare tu hamesha eddan hi hassdi reh, khush reh te life nu apne tareeke naal enjoy kardi reh. 🫶</p>
+            
+            <p>Tere saare dreams taan menu honestly ni pta 🤭, par jo vi ne... saare hi poore hon. Tu life ch jo vi achieve karna chaundi aa, Rabb kare oh sab tenu mile, te har oh cheez mile jidi tu deserve kardi aa. ❤️</p>
+            
+            <p>Te haan... ohna saare dreams ch menu chhad ke hor sab kuchh mil jaave, eh taan bilkul ni hona chahida 😂🤭❤️<br/>
+            Thodi jehi jagah mere layi vi rakh lavi, baaki main adjust kar lunga. 😌</p>
+            
+            <p>Sadi gall hamesha hundi vi ni, kade-kade hi hundi aa 🤭, par jinni vi hundi aa, oh apne aap ch special aa.<br/>
+            Bas eddan hi kade-kade meri bak-bak sun lya kar. 😂</p>
+            
+            <p>Bas ik gall hamesha yaad rakhi—<br/>
+            khush rehna, apni smile nu kade na khona te jo vi dil ch aa, ohde piche zaroor jaana. ✨</p>
+            
+            <p>Te haan Riya... birthday tera aa, wishaan vi teriyan ne, par thoda credit menu vi de di... inni sohni wish likhan layi. 😂🤭❤️</p>
+            
+            <p class="font-bold text-pink-600 text-center">Happy Birthday once again Riya 🎂❤️</p>
+            
+            <p class="text-center">Rabb kare aun wala har din tere layi hor vi sohnaa hove. ✨</p>
+          </div>
+          <button onclick="setStep(14)" class="bg-pink-500 text-white px-6 py-3 rounded-full font-semibold shadow-md active:scale-95 transition w-full">Finally Close 🔒</button>
+        `;
+      }
+      // STEP 14: FINALLY CLOSED
+      else if (step === 14) {
+        card.innerHTML = `
+          <div class="text-6xl mb-3">🎁✨</div>
+          <h2 class="text-2xl font-bold text-pink-600 mb-2">Surprise Completed!</h2>
+          <p class="text-gray-600 text-sm mb-6">Have a wonderful and blessed day ahead, Riya! ❤️</p>
+          <button onclick="setStep(1)" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-full text-xs font-semibold">Replay 🔄</button>
+        `;
+      }
+    }
 
-setInterval(countdown,1000);
+    function setStep(s) { step = s; render(); }
+    function prevPhoto() { if (activePhotoIdx > 0) { activePhotoIdx--; render(); } }
+    function nextPhoto() { if (activePhotoIdx < photos.length - 1) { activePhotoIdx++; render(); } }
+    function updateCaption(val) { photos[activePhotoIdx].caption = val; }
 
+    function startHold(e) {
+      if (e) e.preventDefault();
+      const line = document.getElementById('scanLine');
+      if (line) line.classList.remove('hidden');
 
-/* ==================================================
-   TYPEWRITER
-================================================== */
-
-const message =
-`Kujh lok life ch aunde ne,
-te bas lok nahi rehnde...
-
-Oh memories ban jande ne.
-
-Tere naal vi pata nahi
-kinne chhote-chhote moments
-mere layi important ban gaye.
-
-Bas eh hi kehna si...
-Thank you for being you. ❤️`;
-
-let typed=false;
-
-const observer =
-new IntersectionObserver((entries)=>{
-
-    entries.forEach(entry=>{
-
-        if(entry.isIntersecting && !typed){
-
-            typed=true;
-
-            typeWriter();
-
+      if (holdInterval) clearInterval(holdInterval);
+      holdInterval = setInterval(() => {
+        holdProgress += 20; // Reaches 100% in approx 4.5 - 5 seconds
+        if (holdProgress >= 100) {
+          clearInterval(holdInterval);
+          holdInterval = null;
+          holdProgress = 100;
+          setStep(4);
+        } else {
+          const bar = document.getElementById('fpBar');
+          const txt = document.getElementById('fpText');
+          if (bar) bar.style.width = holdProgress + '%';
+          if (txt) txt.innerText = holdProgress + '%';
         }
-
-    });
-
-},{threshold:.5});
-
-observer.observe(
-    document.getElementById("typedText")
-);
-
-let index=0;
-
-function typeWriter(){
-
-    if(index<message.length){
-
-        document.getElementById("typedText")
-            .innerHTML =
-            message.substring(0,index+1)
-            .replace(/\n/g,"<br>");
-
-        index++;
-
-        setTimeout(
-            typeWriter,
-            35
-        );
-
+      }, 900);
     }
-}
 
-
-/* ==================================================
-   SECRET REVEAL
-================================================== */
-
-function reveal(){
-
-    const box =
-        document.getElementById("secretContent");
-
-    box.style.display="block";
-
-    createConfetti();
-
-    setTimeout(()=>{
-
-        box.scrollIntoView({
-            behavior:"smooth",
-            block:"center"
-        });
-
-    },200);
-}
-
-
-/* ==================================================
-   CONFETTI
-================================================== */
-
-function createConfetti(){
-
-    const final =
-        document.getElementById("final");
-
-    for(let i=0;i<45;i++){
-
-        const piece =
-            document.createElement("div");
-
-        piece.className="confetti";
-
-        piece.style.left =
-            Math.random()*100+"%";
-
-        piece.style.animationDelay =
-            Math.random()*1.5+"s";
-
-        piece.style.transform =
-            `rotate(${Math.random()*360}deg)`;
-
-        piece.style.background =
-            [
-                "#ff9cbd",
-                "#ffd166",
-                "#ffffff",
-                "#c9a7ff",
-                "#ff7f9f"
-            ][Math.floor(Math.random()*5)];
-
-        final.appendChild(piece);
-
-        setTimeout(()=>{
-            piece.remove();
-        },5500);
+    function endHold(e) {
+      if (e) e.preventDefault();
+      if (holdProgress < 100) {
+        if (holdInterval) clearInterval(holdInterval);
+        holdInterval = null;
+        holdProgress = 0;
+        const line = document.getElementById('scanLine');
+        if (line) line.classList.add('hidden');
+        const bar = document.getElementById('fpBar');
+        const txt = document.getElementById('fpText');
+        if (bar) bar.style.width = '0%';
+        if (txt) txt.innerText = '0%';
+      }
     }
-}
 
-
-/* ==================================================
-   MUSIC
-================================================== */
-
-function toggleMusic(){
-
-    const music =
-        document.getElementById("music");
-
-    const button =
-        document.getElementById("musicBtn");
-
-    if(music.paused){
-
-        music.play()
-            .then(()=>{
-                button.innerText="🔊";
-            })
-            .catch(()=>{});
-
-    }else{
-
-        music.pause();
-        button.innerText="♪";
-
+    function handleRelAnswer(ansText, react) {
+      relAnswers.push({ q: relQuestions[relIndex].q, a: ansText });
+      relReaction = react;
+      render();
+      setTimeout(() => {
+        relReaction = '';
+        if (relIndex < relQuestions.length - 1) { relIndex++; } else { step = 9; }
+        render();
+      }, 1200);
     }
-}
 
+    function handleComAnswer(ans) {
+      comAnswers.push({ q: comQuestions[comIndex].q, a: ans });
+      if (comIndex < comQuestions.length - 1) { comIndex++; } else { step = 10; }
+      render();
+    }
 
-/* ==================================================
-   REVEAL ANIMATION ON SCROLL
-================================================== */
+    function initCanvas() {
+      const canvas = document.getElementById('sigCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const getPos = e => {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: (e.touches ? e.touches[0].clientX : e.clientX) - rect.left,
+          y: (e.touches ? e.touches[0].clientY : e.clientY) - rect.top
+        };
+      };
+      const startDraw = e => {
+        isDrawing = true; hasSigned = true;
+        const pos = getPos(e);
+        ctx.beginPath(); ctx.moveTo(pos.x, pos.y);
+        document.getElementById('sigBtn').classList.remove('hidden');
+      };
+      const draw = e => {
+        if (!isDrawing) return;
+        const pos = getPos(e);
+        ctx.strokeStyle = '#ff3366'; ctx.lineWidth = 3;
+        ctx.lineTo(pos.x, pos.y); ctx.stroke();
+      };
+      const stopDraw = () => isDrawing = false;
 
-const cards =
-document.querySelectorAll(".memory-card");
+      canvas.onmousedown = startDraw; canvas.onmousemove = draw; canvas.onmouseup = stopDraw;
+      canvas.ontouchstart = startDraw; canvas.ontouchmove = draw; canvas.ontouchend = stopDraw;
+    }
 
-const cardObserver =
-new IntersectionObserver(
-(entries)=>{
+    function handleCakeClick() {
+      cakeClicks++;
+      confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
 
-    entries.forEach(entry=>{
+      const items = ['🎂', '❤️', '🎈', 'Happy Birthday Riya! 💖', 'Love You ❤️', 'Apna khayal rakhya kar 🫶', '✨'];
+      for (let i = 0; i < 6; i++) {
+        const el = document.createElement('div');
+        el.className = 'falling-item text-xs font-bold text-pink-600 bg-white/90 px-2 py-1 rounded-full shadow-md';
+        el.innerText = items[Math.floor(Math.random() * items.length)];
+        el.style.left = Math.random() * 80 + 10 + 'vw';
+        el.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3000);
+      }
 
-        if(entry.isIntersecting){
+      render();
+    }
 
-            entry.target.style.opacity="1";
-            entry.target.style.transform=
-                "rotate(0deg) translateY(0)";
-
+    function updateTimer() {
+      const target = new Date('2026-09-16T00:00:00+05:30').getTime();
+      const interval = setInterval(() => {
+        const now = new Date().getTime();
+        const diff = target - now;
+        const disp = document.getElementById('timerDisplay');
+        if (!disp) { clearInterval(interval); return; }
+        if (diff <= 0) {
+          disp.innerHTML = `<h1 class="col-span-4 text-sm font-bold text-pink-600 animate-bounce">It's Riya's Birthday! 🎂❤️</h1>`;
+          clearInterval(interval);
+        } else {
+          const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const s = Math.floor((diff % (1000 * 60)) / 1000);
+          disp.innerHTML = `
+            <div class="bg-pink-50 p-2 rounded-xl"><span class="text-base text-pink-600">${d}</span><br/><span class="text-[9px] text-gray-400">Days</span></div>
+            <div class="bg-pink-50 p-2 rounded-xl"><span class="text-base text-pink-600">${h}</span><br/><span class="text-[9px] text-gray-400">Hours</span></div>
+            <div class="bg-pink-50 p-2 rounded-xl"><span class="text-base text-pink-600">${m}</span><br/><span class="text-[9px] text-gray-400">Mins</span></div>
+            <div class="bg-pink-50 p-2 rounded-xl"><span class="text-base text-pink-600">${s}</span><br/><span class="text-[9px] text-gray-400">Secs</span></div>
+          `;
         }
+      }, 1000);
+    }
 
-    });
-
-},
-{
-    threshold:.3
-});
-
-cards.forEach(card=>{
-
-    card.style.opacity="0";
-    card.style.transform=
-        "translateY(40px) rotate(-3deg)";
-
-    cardObserver.observe(card);
-
-});
-
-</script>
-
+    render();
+  </script>
 </body>
 </html>
