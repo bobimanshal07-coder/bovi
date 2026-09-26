@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>I'm Sorry My Love ❤️</title>
+  <title>For My Love ❤️</title>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Poppins', cursive, sans-serif;
     }
     body {
-      background-color: #fdf0f0;
+      background-color: #fce4ec;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -21,87 +21,178 @@
     }
     .app-container {
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
       height: 100vh;
-      max-height: 750px;
-      background: #fff0f5;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      max-height: 800px;
+      background: #fff5f8;
+      border-radius: 25px;
+      box-shadow: 0 15px 30px rgba(233, 30, 99, 0.15);
       position: relative;
-      overflow: hidden;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
-      border: 2px solid #f2c6de;
+      border: 2px solid #f8bbd0;
+    }
+    /* Hide scrollbar for clean aesthetic */
+    .app-container::-webkit-scrollbar {
+      display: none;
     }
     .page {
       display: none;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 25px;
-      height: 100%;
+      justify-content: flex-start;
+      padding: 20px;
+      min-height: 100%;
       text-align: center;
-      animation: fadeIn 0.5s ease-in-out;
+      animation: fadeIn 0.4s ease-in-out;
     }
     .active {
       display: flex;
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
     h1 {
-      color: #8b263e;
-      font-size: 2rem;
-      margin-bottom: 15px;
+      color: #880e4f;
+      font-size: 1.8rem;
+      margin: 10px 0;
     }
     p {
-      color: #6a4051;
-      font-size: 1rem;
-      line-height: 1.5;
-      margin-bottom: 20px;
+      color: #ad1457;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      margin-bottom: 15px;
     }
     .btn {
-      background-color: #e8a0bf;
+      background-color: #f48fb1;
       color: white;
-      border: 2px solid #8b263e;
-      padding: 12px 30px;
-      font-size: 1.1rem;
+      border: 2px solid #880e4f;
+      padding: 10px 25px;
+      font-size: 1rem;
       border-radius: 25px;
       cursor: pointer;
       font-weight: bold;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       transition: all 0.2s;
+      margin-top: 10px;
     }
     .btn:active {
       transform: scale(0.95);
     }
     .letter-card, .reason-card {
       background: #ffffff;
-      border: 1px dashed #e8a0bf;
+      border: 1px dashed #f48fb1;
       border-radius: 15px;
-      padding: 20px;
-      margin-bottom: 15px;
+      padding: 15px;
+      margin-bottom: 12px;
       text-align: left;
       width: 100%;
       box-shadow: 0 4px 10px rgba(0,0,0,0.03);
     }
+
+    /* Aesthetic Video & Image Styles */
+    .featured-video-container {
+      width: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 3px solid #f48fb1;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
+      background: #000;
+    }
+    .featured-video-container video {
+      width: 100%;
+      display: block;
+      border-radius: 15px;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .photo-card {
+      background: #fff;
+      padding: 6px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      border: 1px solid #f8bbd0;
+    }
+    .photo-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .photo-card span {
+      display: block;
+      font-size: 0.75rem;
+      color: #ad1457;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    /* Interactive Runaway Button Box */
     .interactive-box {
       position: relative;
       width: 100%;
-      height: 200px;
+      height: 180px;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 20px;
+      gap: 15px;
     }
     #no-btn {
       position: absolute;
       transition: all 0.2s ease;
     }
-    .bunny-icon {
-      font-size: 60px;
+
+    /* Music Player Card */
+    .music-card {
+      background: #ffffff;
+      border: 2px solid #f48fb1;
+      border-radius: 20px;
+      padding: 20px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.05);
       margin-bottom: 15px;
+    }
+    .vinyl-record {
+      width: 100px;
+      height: 100px;
+      background: #222;
+      border-radius: 50%;
+      border: 4px solid #f48fb1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: spin 4s linear infinite;
+      margin-bottom: 15px;
+    }
+    .vinyl-center {
+      width: 30px;
+      height: 30px;
+      background: #e91e63;
+      border-radius: 50%;
+    }
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+    audio {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .bunny-icon {
+      font-size: 50px;
+      margin-bottom: 5px;
     }
   </style>
 </head>
@@ -109,19 +200,29 @@
 
 <div class="app-container">
 
-  <!-- PAGE 1: HOME / FORGIVENESS -->
+  <!-- PAGE 1: HOME PAGE WITH VIDEO OPTION -->
   <div class="page active" id="page1">
-    <div class="bunny-icon">🐰🥺</div>
+    <div class="bunny-icon">🥺</div>
     <h1>I'm Sorry</h1>
     <p>Can we talk for a minute?</p>
-    <button class="btn" onclick="nextPage(2)">Open</button>
+
+    <!-- Home Page Optional Video Message -->
+    <div class="featured-video-container">
+      <video controls poster="https://via.placeholder.com/400x220/f48fb1/fff?text=Play+Special+Message">
+        <!-- Replace src with your home video path (e.g. video/intro.mp4) -->
+        <source src="your-intro-video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <button class="btn" onclick="nextPage(2)">Open ❤️</button>
   </div>
 
   <!-- PAGE 2: APOLOGY LETTER -->
   <div class="page" id="page2">
     <h1>My Love ❤️</h1>
     <div class="letter-card">
-      <p>I keep thinking about everything in my head. I should have been more careful with your heart.</p>
+      <p>I keep turning this over in my head. I should have been more careful with your heart.</p>
       <p>You deserved softness from me. I love you, and I truly want to make things right.</p>
     </div>
     <button class="btn" onclick="nextPage(3)">Continue</button>
@@ -134,34 +235,88 @@
       <p>⭐ I'm bad at saying sorry, but I'm really trying.</p>
     </div>
     <div class="reason-card">
-      <p>🌸 I let small things get between us instead of talking openly.</p>
+      <p>🌸 I let small things pile up instead of talking openly.</p>
     </div>
     <div class="reason-card">
       <p>❤️ I hurt you — and I am deeply, truly sorry.</p>
     </div>
-    <button class="btn" onclick="nextPage(4)">Continue</button>
+    <button class="btn" onclick="nextPage(4)">See Our Memories 📸</button>
   </div>
 
-  <!-- PAGE 4: INTERACTIVE QUESTION (RUNAWAY "NO" BUTTON) -->
+  <!-- PAGE 4: AESTHETIC MEMORIES SECTION (VIDEO + PHOTO GRID) -->
   <div class="page" id="page4">
-    <div class="bunny-icon">🥺👉👈</div>
+    <h1>Our Special Memories 💖</h1>
+    <p>Look how far we've come...</p>
+
+    <!-- Main Featured Video -->
+    <div class="featured-video-container">
+      <video controls autoplay loop muted>
+        <!-- Replace src with your main memory video path (e.g. video/main-memory.mp4) -->
+        <source src="your-main-memory-video.mp4" type="video/mp4">
+        Your browser does not support video.
+      </video>
+    </div>
+
+    <!-- Aesthetic Photo Grid -->
+    <div class="photo-grid">
+      <div class="photo-card">
+        <img src="https://via.placeholder.com/200x200/f8bbd0/ffffff?text=First+Date" alt="Memory 1">
+        <span>That first laugh</span>
+      </div>
+      <div class="photo-card">
+        <img src="https://via.placeholder.com/200x200/f48fb1/ffffff?text=Our+Trip" alt="Memory 2">
+        <span>Cute moment</span>
+      </div>
+      <div class="photo-card">
+        <img src="https://via.placeholder.com/200x200/f06292/ffffff?text=Silly+Face" alt="Memory 3">
+        <span>Silly faces</span>
+      </div>
+      <div class="photo-card">
+        <img src="https://via.placeholder.com/200x200/e91e63/ffffff?text=Just+Us" alt="Memory 4">
+        <span>Just us ❤️</span>
+      </div>
+    </div>
+
+    <button class="btn" onclick="nextPage(5)" style="margin-top: 15px;">Continue</button>
+  </div>
+
+  <!-- PAGE 5: INTERACTIVE QUESTION (RUNAWAY "NO" BUTTON) -->
+  <div class="page" id="page5">
+    <div class="bunny-icon">🐰👉👈</div>
     <h1>Maan jao na, please?</h1>
-    <p>Kyu itna gussa ho? Maan bhi jao na!</p>
+    <p>Aisa mat karo na, kitna bhav khaogi? 🥺</p>
     <div class="interactive-box">
-      <button class="btn" onclick="nextPage(5)">Yes ❤️</button>
+      <button class="btn" onclick="nextPage(6)">Yes ❤️</button>
       <button class="btn" id="no-btn" onmouseover="moveButton()" onclick="moveButton()">No 😜</button>
     </div>
   </div>
 
-  <!-- PAGE 5: FINAL LOVE PAGE -->
-  <div class="page" id="page5">
-    <div class="bunny-icon">🎉🥰🐰</div>
-    <h1>I Love You!</h1>
-    <div class="letter-card" style="text-align: center;">
-      <p>Thank you for forgiving me! I promise to take care of your heart always.</p>
-      <p><strong>Forever & Always ❤️</strong></p>
+  <!-- PAGE 6: SONG SECTION & FINAL LOVE MESSAGE -->
+  <div class="page" id="page6">
+    <div class="bunny-icon">🎶🥰</div>
+    <h1>Our Song</h1>
+    <p>And suddenly, all the love songs were about <i>you</i>...</p>
+
+    <!-- Music Player Card -->
+    <div class="music-card">
+      <div class="vinyl-record">
+        <div class="vinyl-center"></div>
+      </div>
+      <p style="margin: 0; font-weight: bold;">This one is for you ❤️</p>
+      
+      <!-- Audio Player: Replace 'your-song.mp3' with your audio file link -->
+      <audio controls>
+        <source src="your-song.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
     </div>
-    <button class="btn" onclick="nextPage(1)">Read Again</button>
+
+    <div class="letter-card" style="text-align: center;">
+      <p>I cannot promise I will never stumble, but I promise I will keep choosing you — with more care, honesty, and love.</p>
+      <p><strong>I Love You. Always. ❤️</strong></p>
+    </div>
+
+    <button class="btn" onclick="nextPage(1)">Start Again 🔄</button>
   </div>
 
 </div>
@@ -170,13 +325,18 @@
   function nextPage(pageNumber) {
     const pages = document.querySelectorAll('.page');
     pages.forEach(page => page.classList.remove('active'));
-    document.getElementById('page' + pageNumber).classList.add('active');
+    
+    const activePage = document.getElementById('page' + pageNumber);
+    activePage.classList.add('active');
+
+    // Scroll back to top when switching pages
+    document.querySelector('.app-container').scrollTop = 0;
   }
 
   function moveButton() {
     const noBtn = document.getElementById('no-btn');
-    const x = Math.random() * (window.innerWidth < 400 ? 150 : 200) - 100;
-    const y = Math.random() * 150 - 75;
+    const x = Math.random() * 160 - 80;
+    const y = Math.random() * 120 - 60;
     noBtn.style.transform = `translate(${x}px, ${y}px)`;
   }
 </script>
