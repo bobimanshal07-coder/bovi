@@ -1,382 +1,185 @@
 <!DOCTYPE html>
-<html lang="pa">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forgive Me Bandri 🥺</title>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #ffe6ea 0%, #ffc3a0 100%);
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            color: #4a4a4a;
-            padding: 15px;
-        }
-
-        .screen-container {
-            width: 100%;
-            max-width: 450px;
-            height: 90vh;
-            max-height: 650px;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(10px);
-            border-radius: 25px;
-            padding: 25px 20px;
-            box-shadow: 0 15px 35px rgba(255, 105, 135, 0.2);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            text-align: center;
-            position: relative;
-        }
-
-        .step-screen {
-            display: none;
-            width: 100%;
-            height: 100%;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.4s ease-in-out;
-        }
-
-        .step-screen.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .heart-icon {
-            font-size: 3.5rem;
-            margin-bottom: 15px;
-            animation: pulse 1.2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
-        }
-
-        h1 {
-            font-family: 'Caveat', cursive;
-            font-size: 2.3rem;
-            color: #ff3366;
-            margin-bottom: 10px;
-        }
-
-        h2 {
-            font-family: 'Caveat', cursive;
-            font-size: 2rem;
-            color: #ff3366;
-            margin-bottom: 10px;
-        }
-
-        .note-card {
-            background: #ffffff;
-            border-radius: 18px;
-            padding: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-            border-left: 5px solid #ff4d6d;
-            text-align: left;
-            margin: 15px 0;
-            width: 100%;
-        }
-
-        .note-card h3 {
-            color: #ff3366;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-        }
-
-        .note-card p {
-            font-size: 0.93rem;
-            color: #555;
-            line-height: 1.6;
-        }
-
-        /* Photo Gallery Carousel */
-        .gallery-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            display: flex;
-            gap: 12px;
-            padding: 10px 0;
-            scroll-snap-type: x mandatory;
-        }
-
-        .polaroid-card {
-            flex: 0 0 200px;
-            scroll-snap-align: center;
-            background: white;
-            padding: 8px 8px 12px 8px;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-        }
-
-        .polaroid-card img {
-            width: 100%;
-            height: 170px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        .polaroid-card p {
-            font-family: 'Caveat', cursive;
-            font-size: 1.1rem;
-            color: #ff3366;
-            margin-top: 5px;
-        }
-
-        /* Buttons */
-        .nav-btn {
-            background-color: #ff4d6d;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
-            transition: transform 0.2s;
-            margin-top: 15px;
-        }
-
-        .nav-btn:hover {
-            transform: scale(1.05);
-            background-color: #ff3355;
-        }
-
-        .btn-group {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-top: 20px;
-            width: 100%;
-            position: relative;
-            min-height: 60px;
-        }
-
-        #noBtn {
-            background-color: #7f8c8d;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.15s ease;
-            position: absolute;
-        }
-
-        /* Popup Modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
-            z-index: 999;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 25px;
-            padding: 30px 25px;
-            text-align: center;
-            max-width: 380px;
-            width: 100%;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            animation: popIn 0.3s ease-out;
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0.7); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .modal-content h2 {
-            color: #ff3366;
-            font-family: 'Caveat', cursive;
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-        }
-
-        .modal-content p {
-            color: #555;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .close-btn {
-            background: #ff4d6d;
-            color: white;
-            padding: 10px 25px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I'm Sorry My Love ❤️</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background-color: #fdf0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .app-container {
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      max-height: 750px;
+      background: #fff0f5;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 2px solid #f2c6de;
+    }
+    .page {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+      height: 100%;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 {
+      color: #8b263e;
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+    p {
+      color: #6a4051;
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .btn {
+      background-color: #e8a0bf;
+      color: white;
+      border: 2px solid #8b263e;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: all 0.2s;
+    }
+    .btn:active {
+      transform: scale(0.95);
+    }
+    .letter-card, .reason-card {
+      background: #ffffff;
+      border: 1px dashed #e8a0bf;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
+      text-align: left;
+      width: 100%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+    .interactive-box {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+    #no-btn {
+      position: absolute;
+      transition: all 0.2s ease;
+    }
+    .bunny-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="screen-container">
-        
-        <!-- STEP 1: Hero Welcome -->
-        <div class="step-screen active" id="step1">
-            <div class="heart-icon">🥺❤️</div>
-            <h1>Hey Bandri...</h1>
-            <p style="color: #666; font-size: 0.95rem; margin-top: 10px;">Mainu pata hai tu mere ton bht gusse aen, te tera gussa hona vi sahi hai. Par please 2 min meri baat dhyan naal sun le...</p>
-            <button class="nav-btn" onclick="nextStep(2)">Aage Suno 👉</button>
-        </div>
+<div class="app-container">
 
-        <!-- STEP 2: Photo Gallery (photo1.jpg to photo11.jpg) -->
-        <div class="step-screen" id="step2">
-            <h2>Sadi Pyari Yaadan ❤️</h2>
-            <p style="font-size: 0.85rem; color: #777; margin-bottom: 10px;">Swipe karke sadi memories dekho...</p>
-            <div class="gallery-wrapper">
-                <div class="polaroid-card"><img src="photo1.jpg" alt="1"><p>Pehli Yaadan ❤️</p></div>
-                <div class="polaroid-card"><img src="photo2.jpg" alt="2"><p>Always Together 💫</p></div>
-                <div class="polaroid-card"><img src="photo3.jpg" alt="3"><p>Meri Jaan Bandri 🥺</p></div>
-                <div class="polaroid-card"><img src="photo4.jpg" alt="4"><p>Best Moments ✨</p></div>
-                <div class="polaroid-card"><img src="photo5.jpg" alt="5"><p>Cute Smile 😊</p></div>
-                <div class="polaroid-card"><img src="photo6.jpg" alt="6"><p>Never Lost Love ❤️</p></div>
-                <div class="polaroid-card"><img src="photo7.jpg" alt="7"><p>My Favorite Person 🌸</p></div>
-                <div class="polaroid-card"><img src="photo8.jpg" alt="8"><p>Tu Hi Tu Humesha ❤️</p></div>
-                <div class="polaroid-card"><img src="photo9.jpg" alt="9"><p>Gussa Chhad De Ab 🥺</p></div>
-                <div class="polaroid-card"><img src="photo10.jpg" alt="10"><p>Forever Yours 💖</p></div>
-                <div class="polaroid-card"><img src="photo11.jpg" alt="11"><p>Smile Kar De Hun! 😄</p></div>
-            </div>
-            <button class="nav-btn" onclick="nextStep(3)">Next 👉</button>
-        </div>
+  <!-- PAGE 1: HOME / FORGIVENESS -->
+  <div class="page active" id="page1">
+    <div class="bunny-icon">🐰🥺</div>
+    <h1>I'm Sorry</h1>
+    <p>Can we talk for a minute?</p>
+    <button class="btn" onclick="nextPage(2)">Open</button>
+  </div>
 
-        <!-- STEP 3: Privacy Note -->
-        <div class="step-screen" id="step3">
-            <div class="note-card">
-                <h3>🔒 Privacy & Trust Matter</h3>
-                <p>Tu mainu kiha si ki apne baare kisi nu pata na chale. Meri carelessness karke baat bahar chali gayi... Is vich poori galti meri hai. Mainu aisa nahi karna chahida si. I promise aage ton teri privacy te trust meri sab ton pehli priority rahegi.</p>
-            </div>
-            <button class="nav-btn" onclick="nextStep(4)">Ek Hor Baat 👉</button>
-        </div>
-
-        <!-- STEP 4: Truth About The Other Girl -->
-        <div class="step-screen" id="step4">
-            <div class="note-card">
-                <h3>❤️ Truth About That Girl</h3>
-                <p>Os kudi da meri life vich koi lena-dena nahi hai. Oh bas aape baat karne di koshish kar rahi si. Mere dil te dimag vich sirf tu aen te humesha tu hi rahegi, koi hor nahi! Please is karke misunderstanding mat rakh.</p>
-            </div>
-            <button class="nav-btn" onclick="nextStep(5)">Aakhri Note 👉</button>
-        </div>
-
-        <!-- STEP 5: Heartfelt Forgive Note -->
-        <div class="step-screen" id="step5">
-            <div class="note-card">
-                <h3>💌 Dil Ton Forgive Note</h3>
-                <p>Tere naal gusse vich reh ke mera poora din udas nikalda hai. Mainu pata hai mene galti kiti hai, par main tainu khona nahi chahunda. Ek vaar smile kar de te mainu maaf kar de... Main dobara tainu kade hurt nahi karunga!</p>
-            </div>
-            <button class="nav-btn" onclick="nextStep(6)">Aakhri Sawaal 🥺👉</button>
-        </div>
-
-        <!-- STEP 6: Interactive Choice Screen -->
-        <div class="step-screen" id="step6">
-            <h2>Abhi bhi gussa aen mere ton? 🥺</h2>
-            <p style="font-size: 0.9rem; color: #666;">Sach bolo, maaf kita ki nahi?</p>
-            
-            <div class="btn-group">
-                <button class="nav-btn" id="yesBtn" onclick="acceptApology()" style="position: relative; z-index: 5;">Haan, Maaf Kita! ❤️</button>
-                <button id="noBtn" onmouseover="dodgeButton()" onclick="dodgeButton()" ontouchstart="dodgeButton()">Nahi 😤</button>
-            </div>
-        </div>
-
+  <!-- PAGE 2: APOLOGY LETTER -->
+  <div class="page" id="page2">
+    <h1>My Love ❤️</h1>
+    <div class="letter-card">
+      <p>I keep thinking about everything in my head. I should have been more careful with your heart.</p>
+      <p>You deserved softness from me. I love you, and I truly want to make things right.</p>
     </div>
+    <button class="btn" onclick="nextPage(3)">Continue</button>
+  </div>
 
-    <!-- Celebration Popup -->
-    <div class="modal-overlay" id="modal">
-        <div class="modal-content">
-            <h2>Yay! Thank You Meri Jaan! ❤️</h2>
-            <p>Thank you so much Bandri! I promise main tera trust kade nahi todunga. Ab jaldi ton ek pyaari jehi smile kar de te gussa chhad de! 😊🍦</p>
-            <button class="close-btn" onclick="closeModal()">Hug & Ice Cream Treat Claimed 🫂</button>
-        </div>
+  <!-- PAGE 3: REASONS I'M SORRY -->
+  <div class="page" id="page3">
+    <h1>Reasons I'm Sorry</h1>
+    <div class="reason-card">
+      <p>⭐ I'm bad at saying sorry, but I'm really trying.</p>
     </div>
+    <div class="reason-card">
+      <p>🌸 I let small things get between us instead of talking openly.</p>
+    </div>
+    <div class="reason-card">
+      <p>❤️ I hurt you — and I am deeply, truly sorry.</p>
+    </div>
+    <button class="btn" onclick="nextPage(4)">Continue</button>
+  </div>
 
-    <script>
-        let currentStep = 1;
+  <!-- PAGE 4: INTERACTIVE QUESTION (RUNAWAY "NO" BUTTON) -->
+  <div class="page" id="page4">
+    <div class="bunny-icon">🥺👉👈</div>
+    <h1>Maan jao na, please?</h1>
+    <p>Kyu itna gussa ho? Maan bhi jao na!</p>
+    <div class="interactive-box">
+      <button class="btn" onclick="nextPage(5)">Yes ❤️</button>
+      <button class="btn" id="no-btn" onmouseover="moveButton()" onclick="moveButton()">No 😜</button>
+    </div>
+  </div>
 
-        function nextStep(stepNumber) {
-            document.getElementById(`step${currentStep}`).classList.remove('active');
-            document.getElementById(`step${stepNumber}`).classList.add('active');
-            currentStep = stepNumber;
+  <!-- PAGE 5: FINAL LOVE PAGE -->
+  <div class="page" id="page5">
+    <div class="bunny-icon">🎉🥰🐰</div>
+    <h1>I Love You!</h1>
+    <div class="letter-card" style="text-align: center;">
+      <p>Thank you for forgiving me! I promise to take care of your heart always.</p>
+      <p><strong>Forever & Always ❤️</strong></p>
+    </div>
+    <button class="btn" onclick="nextPage(1)">Read Again</button>
+  </div>
 
-            if (stepNumber === 6) {
-                // Initialize No Button position
-                resetNoButton();
-            }
-        }
+</div>
 
-        function resetNoButton() {
-            const noBtn = document.getElementById('noBtn');
-            noBtn.style.position = 'relative';
-            noBtn.style.left = '0px';
-            noBtn.style.top = '0px';
-        }
+<script>
+  function nextPage(pageNumber) {
+    const pages = document.querySelectorAll('.page');
+    pages.forEach(page => page.classList.remove('active'));
+    document.getElementById('page' + pageNumber).classList.add('active');
+  }
 
-        function dodgeButton() {
-            const noBtn = document.getElementById('noBtn');
-            const container = document.querySelector('.screen-container');
-            
-            const containerRect = container.getBoundingClientRect();
-            
-            // Generate random bounds inside the card screen
-            const maxX = containerRect.width - noBtn.offsetWidth - 40;
-            const maxY = containerRect.height - noBtn.offsetHeight - 40;
-            
-            const randomX = Math.floor(Math.random() * maxX);
-            const randomY = Math.floor(Math.random() * maxY);
-            
-            noBtn.style.position = 'absolute';
-            noBtn.style.left = `${Math.max(20, randomX)}px`;
-            noBtn.style.top = `${Math.max(20, randomY)}px`;
-        }
+  function moveButton() {
+    const noBtn = document.getElementById('no-btn');
+    const x = Math.random() * (window.innerWidth < 400 ? 150 : 200) - 100;
+    const y = Math.random() * 150 - 75;
+    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+  }
+</script>
 
-        function acceptApology() {
-            document.getElementById('modal').style.display = 'flex';
-            if (typeof confetti === 'function') {
-                confetti({
-                    particleCount: 120,
-                    spread: 80,
-                    origin: { y: 0.6 }
-                });
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('modal').style.display = 'none';
-        }
-    </script>
 </body>
 </html>
